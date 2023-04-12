@@ -1,5 +1,7 @@
 package src
 
+import "regexp"
+
 /*
 Calculator returns the sum of the document
   - @param {string} doc
@@ -42,4 +44,13 @@ func GetDigit(sum int) int {
 		return 0
 	}
 	return 11 - rest
+}
+
+/*
+RemoveChar returns the string without special characters
+  - @param {string} str
+  - @return {string}
+*/
+func RemoveChar(str string) string {
+	return regexp.MustCompile("[^0-9]+").ReplaceAllString(str, "")
 }
