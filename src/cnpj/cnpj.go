@@ -1,7 +1,7 @@
 package cnpj
 
 import (
-	"brazil-code/src"
+	"brazilcode/src"
 	"errors"
 	"fmt"
 	"math/rand"

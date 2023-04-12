@@ -1,3 +1,3 @@
-module brazil-code
+module brazilcode
 
 go 1.20
