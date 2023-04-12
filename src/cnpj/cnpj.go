@@ -55,7 +55,7 @@ func Format(doc string) (string, error) {
 Generate is to create a random CNPJ
   - @return {string}
 */
-func Generate() string {
+func Generate() (string, error) {
 	var cnpj string
 
 	for i := 0; i < 12; i++ {
@@ -68,5 +68,9 @@ func Generate() string {
 	sum = src.Calculator(cnpj, 6)
 	cnpj += fmt.Sprintf("%d", src.GetDigit(sum))
 
-	return cnpj
+	if err := IsValid(cnpj); err != nil {
+		return "", err
+	}
+
+	return cnpj, nil
 }
