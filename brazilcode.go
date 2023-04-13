@@ -1,8 +1,8 @@
 package brazilcode
 
 import (
-	"brazilcode/src/cnpj"
-	"brazilcode/src/cpf"
+	"github.com/potatowski/brazilcode/src/cnpj"
+	"github.com/potatowski/brazilcode/src/cpf"
 )
 
 func CNPJIsValid(doc string) error {

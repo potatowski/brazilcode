@@ -1,10 +1,11 @@
 package cpf
 
 import (
-	"brazilcode/src"
 	"errors"
 	"fmt"
 	"math/rand"
+
+	"github.com/potatowski/brazilcode/src"
 )
 
 /*
