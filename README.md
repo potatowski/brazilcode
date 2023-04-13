@@ -8,7 +8,7 @@ You'll need Go 1.20+. Clone and download dependencies.
 
 ```shell
 $ go mod download
-$ go get install github.com/potatowski/brazilcode
+$ go get github.com/potatowski/brazilcode
 ```
 
 ## License
