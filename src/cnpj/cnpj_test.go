@@ -39,6 +39,13 @@ func TestIsValid(t *testing.T) {
 	if err == nil || err.Error() != expectedErr.Error() {
 		t.Errorf("IsValid(\"11.222.333/00a1-81\") returned an unexpected error: %v; expected %v", err, expectedErr)
 	}
+
+	// Test case 6: CNPJ with invalid check digits
+	err = IsValid("11.222.333/0001-01")
+	expectedErr = errors.New("Invalid CNPJ")
+	if err == nil || err.Error() != expectedErr.Error() {
+		t.Errorf("IsValid(\"11.222.333/0001-82\") returned an unexpected error: %v; expected %v", err, expectedErr)
+	}
 }
 
 func TestFormat(t *testing.T) {

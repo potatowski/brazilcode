@@ -33,7 +33,7 @@ func IsValid(doc string) error {
 	for i := 0; i < 10; i++ {
 		sum += int(doc[i]-'0') * (11 - i)
 	}
-	sum = sum % 11
+
 	secondDigit := src.GetDigit(sum)
 
 	if secondDigit != int(doc[10]-'0') {
