@@ -61,3 +61,33 @@ func TestGetDigit(t *testing.T) {
 		t.Errorf("GetDigit(27) = %d; expected %d", result, expected)
 	}
 }
+
+func TestRemoveChar(t *testing.T) {
+	// Test case 1: str with only numbers
+	result := src.RemoveChar("12345")
+	expected := "12345"
+	if result != expected {
+		t.Errorf("RemoveChar(\"12345\") = %s; expected %s", result, expected)
+	}
+
+	// Test case 2: str with only letters
+	result = src.RemoveChar("abcde")
+	expected = ""
+	if result != expected {
+		t.Errorf("RemoveChar(\"abcde\") = %s; expected %s", result, expected)
+	}
+
+	// Test case 3: str with numbers and letters
+	result = src.RemoveChar("1a2b3c4d5e")
+	expected = "12345"
+	if result != expected {
+		t.Errorf("RemoveChar(\"1a2b3c4d5e\") = %s; expected %s", result, expected)
+	}
+
+	// Test case 4: str equals ""
+	result = src.RemoveChar("")
+	expected = ""
+	if result != expected {
+		t.Errorf("RemoveChar(\"\") = %s; expected %s", result, expected)
+	}
+}
