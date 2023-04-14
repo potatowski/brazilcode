@@ -46,3 +46,54 @@ func TestIsValid(t *testing.T) {
 		})
 	}
 }
+
+func TestFormat(t *testing.T) {
+	testCases := []struct {
+		name          string
+		doc           string
+		expected      string
+		expectedError error
+	}{
+		{
+			name:          "Valid CPF",
+			doc:           "12345678909",
+			expected:      "123.456.789-09",
+			expectedError: nil,
+		},
+		{
+			name:          "Invalid CPF - wrong length",
+			doc:           "1234567890",
+			expected:      "",
+			expectedError: errors.New("Invalid CPF"),
+		},
+		{
+			name:          "Invalid CPF - wrong first digit",
+			doc:           "12345678919",
+			expected:      "",
+			expectedError: errors.New("Invalid CPF"),
+		},
+		{
+			name:          "Invalid CPF - wrong second digit",
+			doc:           "12345678908",
+			expected:      "",
+			expectedError: errors.New("Invalid CPF"),
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			result, err := Format(tc.doc)
+			if err == nil && tc.expectedError != nil {
+				t.Errorf("Expected error to be '%v' but got '%v'", tc.expectedError, err)
+			}
+
+			if err != nil && err.Error() != tc.expectedError.Error() {
+				t.Errorf("Expected error to be '%v' but got '%v'", tc.expectedError, err)
+			}
+
+			if result != tc.expected {
+				t.Errorf("Expected result to be '%v' but got '%v'", tc.expected, result)
+			}
+		})
+	}
+}
