@@ -97,3 +97,14 @@ func TestFormat(t *testing.T) {
 		})
 	}
 }
+
+func TestGenerate(t *testing.T) {
+	cnpj, err := Generate()
+	if err != nil {
+		t.Errorf("unexpected error: %v", err)
+	}
+
+	if len(cnpj) != 11 {
+		t.Errorf("unexpected result: generated CPF has invalid length")
+	}
+}
