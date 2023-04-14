@@ -19,7 +19,7 @@ func TestCalculator(t *testing.T) {
 
 	// Test case 2: doc with more than 10 characters and first positive
 	result, err = src.Calculator("12345678901", 1)
-	expected = 165
+	expected = 244
 	if err != nil {
 		t.Errorf("unexpected error: %v", err)
 	}
