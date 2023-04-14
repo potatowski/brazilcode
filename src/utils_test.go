@@ -45,3 +45,19 @@ func TestCalculator(t *testing.T) {
 		t.Errorf("expected an error about first equals 0")
 	}
 }
+
+func TestGetDigit(t *testing.T) {
+	// Test case 1: sum with rest less than 2
+	result := src.GetDigit(287)
+	expected := 0
+	if result != expected {
+		t.Errorf("GetDigit(22) = %d; expected %d", result, expected)
+	}
+
+	// Test case 2: sum with rest more than or equals 2
+	result = src.GetDigit(237)
+	expected = 5
+	if result != expected {
+		t.Errorf("GetDigit(27) = %d; expected %d", result, expected)
+	}
+}
