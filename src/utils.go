@@ -1,6 +1,9 @@
 package src
 
-import "regexp"
+import (
+	"errors"
+	"regexp"
+)
 
 /*
 Calculator returns the sum of the document
@@ -8,7 +11,15 @@ Calculator returns the sum of the document
   - @param {int} first
   - @return {int}
 */
-func Calculator(doc string, first int) int {
+func Calculator(doc string, first int) (int, error) {
+	if first <= 0 {
+		return 0, errors.New("first must be greater than 0")
+	}
+
+	if len(doc) == 0 {
+		return 0, errors.New("doc must be greater than 0")
+	}
+
 	var sum int
 	if len(doc) > 9 {
 		for _, value := range doc {
@@ -21,7 +32,7 @@ func Calculator(doc string, first int) int {
 			first--
 		}
 
-		return sum
+		return sum, nil
 	}
 
 	for _, value := range doc {
@@ -30,7 +41,7 @@ func Calculator(doc string, first int) int {
 		first--
 	}
 
-	return sum
+	return sum, nil
 }
 
 /*

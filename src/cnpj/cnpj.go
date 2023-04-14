@@ -24,14 +24,22 @@ func IsValid(doc string) error {
 
 	doc = doc[:12]
 	var sum int
-	sum = src.Calculator(doc, 5)
+	sum, err := src.Calculator(doc, 5)
+	if err != nil {
+		return err
+	}
+
 	firstDigit := src.GetDigit(sum)
 	if firstDigit != int(firstDigitCheck) {
 		return errors.New("Invalid CNPJ")
 	}
 	doc += fmt.Sprintf("%d", firstDigit)
 
-	sum = src.Calculator(doc, 6)
+	sum, err = src.Calculator(doc, 6)
+	if err != nil {
+		return err
+	}
+
 	secondDigit := src.GetDigit(sum)
 	if secondDigit != int(secondDigitCheck) {
 		return errors.New("Invalid CNPJ")
@@ -63,10 +71,18 @@ func Generate() (string, error) {
 		cnpj += fmt.Sprintf("%d", rand.Intn(9))
 	}
 
-	sum := src.Calculator(cnpj, 5)
+	sum, err := src.Calculator(cnpj, 5)
+	if err != nil {
+		return "", err
+	}
+
 	cnpj += fmt.Sprintf("%d", src.GetDigit(sum))
 
-	sum = src.Calculator(cnpj, 6)
+	sum, err = src.Calculator(cnpj, 6)
+	if err != nil {
+		return "", err
+	}
+
 	cnpj += fmt.Sprintf("%d", src.GetDigit(sum))
 
 	if err := IsValid(cnpj); err != nil {

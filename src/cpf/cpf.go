@@ -67,10 +67,18 @@ func Generate() (string, error) {
 		cpf += fmt.Sprintf("%d", rand.Intn(9))
 	}
 
-	sum := src.Calculator(cpf, 10)
+	sum, err := src.Calculator(cpf, 10)
+	if err != nil {
+		return "", err
+	}
+
 	cpf += fmt.Sprintf("%d", src.GetDigit(sum))
 
-	sum = src.Calculator(cpf, 11)
+	sum, err = src.Calculator(cpf, 11)
+	if err != nil {
+		return "", err
+	}
+
 	cpf += fmt.Sprintf("%d", src.GetDigit(sum))
 
 	if err := IsValid(cpf); err != nil {
