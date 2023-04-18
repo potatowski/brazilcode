@@ -46,3 +46,14 @@ func TestIsValid(t *testing.T) {
 		})
 	}
 }
+
+func TestGenerate(t *testing.T) {
+	cnh, err := Generate()
+	if err != nil {
+		t.Errorf("[TEST-CNH-generate] unexpected error: %v\n CNH generated: %s", err, cnh)
+	}
+
+	if len(cnh) != 11 {
+		t.Errorf("[TEST-CNH-generate] unexpected result: generated CNH has invalid length, got %d", len(cnh))
+	}
+}
