@@ -3,7 +3,6 @@ package cnpj
 import (
 	"errors"
 	"fmt"
-	"math/rand"
 
 	"github.com/potatowski/brazilcode/src"
 )
@@ -65,11 +64,7 @@ Generate is to create a random CNPJ
   - @return {string}
 */
 func Generate() (string, error) {
-	var cnpj string
-
-	for i := 0; i < 12; i++ {
-		cnpj += fmt.Sprintf("%d", rand.Intn(9))
-	}
+	cnpj := src.GenerateRandomDoc(12, 9)
 
 	sum, err := src.Calculator(cnpj, 5)
 	if err != nil {
