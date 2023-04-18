@@ -1,6 +1,7 @@
 package brazilcode
 
 import (
+	"github.com/potatowski/brazilcode/src/cnh"
 	"github.com/potatowski/brazilcode/src/cnpj"
 	"github.com/potatowski/brazilcode/src/cpf"
 )
@@ -27,4 +28,12 @@ func CPFFormat(doc string) (string, error) {
 
 func CPFGenerate() (string, error) {
 	return cpf.Generate()
+}
+
+func CNHIsValid(doc string) error {
+	return cnh.IsValid(doc)
+}
+
+func CNHGenerate() (string, error) {
+	return cnh.Generate()
 }
