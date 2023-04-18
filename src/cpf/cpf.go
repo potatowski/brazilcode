@@ -3,7 +3,6 @@ package cpf
 import (
 	"errors"
 	"fmt"
-	"math/rand"
 
 	"github.com/potatowski/brazilcode/src"
 )
@@ -61,11 +60,7 @@ Generate is to create a random CPF
   - @return {string, error}
 */
 func Generate() (string, error) {
-	var cpf string
-
-	for i := 0; i < 9; i++ {
-		cpf += fmt.Sprintf("%d", rand.Intn(9))
-	}
+	cpf := src.GenerateRandomDoc(9, 9)
 
 	sum, err := src.Calculator(cpf, 10)
 	if err != nil {
