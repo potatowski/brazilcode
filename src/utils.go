@@ -68,6 +68,12 @@ func RemoveChar(str string) string {
 	return regexp.MustCompile("[^0-9]+").ReplaceAllString(str, "")
 }
 
+/*
+GenerateRandomDoc returns a random document
+  - @param {int} len
+  - @param {int} numberInRand
+  - @return {string}
+*/
 func GenerateRandomDoc(len, numberInRand int) string {
 	var doc string
 	for i := 0; i < len; i++ {
