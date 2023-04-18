@@ -2,6 +2,8 @@ package src
 
 import (
 	"errors"
+	"fmt"
+	"math/rand"
 	"regexp"
 )
 
@@ -64,4 +66,13 @@ RemoveChar returns the string without special characters
 */
 func RemoveChar(str string) string {
 	return regexp.MustCompile("[^0-9]+").ReplaceAllString(str, "")
+}
+
+func GenerateRandomDoc(len, numberInRand int) string {
+	var doc string
+	for i := 0; i < len; i++ {
+		doc += fmt.Sprintf("%d", rand.Intn(numberInRand))
+	}
+
+	return doc
 }
