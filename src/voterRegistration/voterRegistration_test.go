@@ -104,3 +104,29 @@ func TestFormat(t *testing.T) {
 		})
 	}
 }
+
+func TestGenerate(t *testing.T) {
+	// Test case 1: valid UF
+	uf := "MG"
+	voter, err := Generate(uf)
+	if err != nil {
+		t.Errorf("unexpected error: %v", err)
+	}
+
+	if len(voter) != 12 {
+		t.Errorf("expected length 12, but got length %d", len(voter))
+	}
+
+	code := ufToCode[uf]
+
+	if code != voter[8:10] {
+		t.Errorf("expected %s uf code, but got %s", uf, voter[8:10])
+	}
+
+	// Test case 2: invalid UF
+	uf = "XX"
+	_, err = Generate(uf)
+	if err == nil {
+		t.Errorf("expected error, but got nil")
+	}
+}
