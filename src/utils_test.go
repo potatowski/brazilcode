@@ -1,7 +1,9 @@
 package src_test
 
 import (
+	"math/rand"
 	"testing"
+	"time"
 
 	"github.com/potatowski/brazilcode/src"
 )
@@ -89,5 +91,25 @@ func TestRemoveChar(t *testing.T) {
 	expected = ""
 	if result != expected {
 		t.Errorf("RemoveChar(\"\") = %s; expected %s", result, expected)
+	}
+}
+
+func TestGenerateRandomDoc(t *testing.T) {
+	rand.Seed(time.Now().UnixNano())
+
+	length := 10
+	numberInRand := 10
+	doc := src.GenerateRandomDoc(length, numberInRand)
+
+	expectedLen := length
+	if len(doc) != expectedLen {
+		t.Errorf("GenerateRandomDoc() = %q, expected length %d", doc, expectedLen)
+	}
+
+	for _, char := range doc {
+		if !('0' <= char && char <= '9') {
+			t.Errorf("GenerateRandomDoc() = %q, contains non-digit character %q", doc, char)
+			break
+		}
 	}
 }
