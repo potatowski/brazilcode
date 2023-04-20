@@ -135,3 +135,29 @@ func TestCalculatorCNH(t *testing.T) {
 		t.Errorf("CalculatorCNH(%q, %d, %q) did not return an error for invalid incrementType", doc, first, incrementType)
 	}
 }
+
+func TestCalculateCNHDVs(t *testing.T) {
+	// Test case 1: valid CNH
+	cnh := "97625655678"
+
+	dv1, dv2, err := src.CalculateCNHDVs(cnh)
+	if err != nil {
+		t.Errorf("CalculateCNHDVs(%q) returned an error: %v", cnh, err)
+	}
+
+	expectedDv1 := 7
+	if dv1 != expectedDv1 {
+		t.Errorf("CalculateCNHDVs(%q) dv1 = %d, expected %d", cnh, dv1, expectedDv1)
+	}
+	expectedDv2 := 8
+	if dv2 != expectedDv2 {
+		t.Errorf("CalculateCNHDVs(%q) dv2 = %d, expected %d", cnh, dv2, expectedDv2)
+	}
+
+	// Test case 2: invalid CNH length
+	cnh = "12345678"
+	_, _, err = src.CalculateCNHDVs(cnh)
+	if err == nil {
+		t.Errorf("CalculateCNHDVs(%q) did not return an error for invalid CNH", cnh)
+	}
+}
