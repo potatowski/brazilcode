@@ -4,6 +4,7 @@ import (
 	"github.com/potatowski/brazilcode/src/cnh"
 	"github.com/potatowski/brazilcode/src/cnpj"
 	"github.com/potatowski/brazilcode/src/cpf"
+	"github.com/potatowski/brazilcode/src/voterRegistration"
 )
 
 func CNPJIsValid(doc string) error {
@@ -36,4 +37,16 @@ func CNHIsValid(doc string) error {
 
 func CNHGenerate() (string, error) {
 	return cnh.Generate()
+}
+
+func VoterRegistrationIsValid(doc string) error {
+	return voterRegistration.IsValid(doc)
+}
+
+func VoterRegistrationFormat(doc string) (string, error) {
+	return voterRegistration.Format(doc)
+}
+
+func VoterRegistrationGenerate(uf string) (string, error) {
+	return voterRegistration.Generate(uf)
 }
