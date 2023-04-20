@@ -130,3 +130,36 @@ func TestGenerate(t *testing.T) {
 		t.Errorf("expected error, but got nil")
 	}
 }
+
+func TestGetRandomKey(t *testing.T) {
+	m := make(map[string]string)
+	result := getRandomKey(m)
+	expected := ""
+	if result != expected {
+		t.Errorf("O resultado esperado era %q, mas o retorno foi %q", expected, result)
+	}
+
+	m = map[string]string{"a": "1"}
+	result = getRandomKey(m)
+	expected = "a"
+	if result != expected {
+		t.Errorf("O resultado esperado era %q, mas o retorno foi %q", expected, result)
+	}
+}
+
+func TestGetRandomUF(t *testing.T) {
+	// Test case 1: non empty map
+	result := getRandomUF()
+	nonExpected := ""
+	if result == nonExpected {
+		t.Errorf("O resultado não esperado era %q, e o retorno foi %q", nonExpected, result)
+	}
+
+	// Test case 2: empty map
+	ufToCode = make(map[string]string)
+	result = getRandomUF()
+	expected := "RR"
+	if result != expected {
+		t.Errorf("O resultado esperado era %q, mas o retorno foi %q", expected, result)
+	}
+}
