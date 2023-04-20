@@ -75,6 +75,36 @@ IsValid check if the Voter Registration is valid
   - @return {error}
 */
 func IsValid(voterRegistration string) error {
+	voterRegistration = src.RemoveChar(voterRegistration)
+	if len(voterRegistration) != 12 {
+		return errors.New("Voter Registration with invalid length")
+	}
+
+	uf := codeToUf[voterRegistration[8:10]]
+	if uf == "" {
+		return errors.New("Invalid UF")
+	}
+
+	sum, err := calc(voterRegistration[:8], 2, 9)
+	if err != nil {
+		return err
+	}
+	dv1 := src.GetDigitMoreThen(sum, false)
+	if dv1 != int(voterRegistration[10]-'0') {
+		fmt.Println(dv1, voterRegistration[10]-'0')
+		return errors.New("Invalid Voter Registration a")
+	}
+
+	sum, err = calc(voterRegistration[8:11], 7, 9)
+	if err != nil {
+		return err
+	}
+
+	dv2 := src.GetDigitMoreThen(sum, false)
+	if dv2 != int(voterRegistration[11]-'0') {
+		return errors.New("Invalid Voter Registration b")
+	}
+
 	return nil
 }
 
