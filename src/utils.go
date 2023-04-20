@@ -149,3 +149,23 @@ func CalculateCNHDVs(cnh string) (int, int, error) {
 
 	return dv1, dv2, nil
 }
+
+/*
+GetDigitMoreThen returns the digit of the document
+  - @param {int} sum
+  - @param {bool} withAux
+  - @return {int}
+*/
+func GetDigitMoreThen(sum int, withAux bool) (result int) {
+	digitCheck := sum % 11
+	aux := 0
+	if digitCheck >= 10 {
+		digitCheck = 0
+		if withAux {
+			aux = 2
+		}
+	}
+
+	result = digitCheck - aux*2
+	return result
+}
