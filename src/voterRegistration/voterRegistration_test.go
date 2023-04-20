@@ -129,6 +129,13 @@ func TestGenerate(t *testing.T) {
 	if err == nil {
 		t.Errorf("expected error, but got nil")
 	}
+
+	// Test case 3: empty UF
+	uf = ""
+	voter, err = Generate(uf)
+	if err != nil {
+		t.Errorf("unexpected error: %v", err)
+	}
 }
 
 func TestGetRandomKey(t *testing.T) {
