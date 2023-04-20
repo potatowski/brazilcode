@@ -161,3 +161,44 @@ func TestCalculateCNHDVs(t *testing.T) {
 		t.Errorf("CalculateCNHDVs(%q) did not return an error for invalid CNH", cnh)
 	}
 }
+
+func TestGetDigitMoreThen(t *testing.T) {
+	// Test case 1: valid sum with aux
+	sum := 20
+	withAux := true
+	expectedResult := 9
+
+	result := src.GetDigitMoreThen(sum, withAux)
+	if result != expectedResult {
+		t.Errorf("GetDigitMoreThen(%d, %t) = %d, expected %d", sum, withAux, result, expectedResult)
+	}
+
+	// Test case 2: valid sum without aux
+	sum = 20
+	withAux = false
+	expectedResult = 9
+
+	result = src.GetDigitMoreThen(sum, withAux)
+	if result != expectedResult {
+		t.Errorf("GetDigitMoreThen(%d, %t) = %d, expected %d", sum, withAux, result, expectedResult)
+	}
+
+	// Test case 3: digit check more than 9
+	sum = 21
+	withAux = false
+	expectedResult = 0
+	result = src.GetDigitMoreThen(sum, withAux)
+	if result != expectedResult {
+		t.Errorf("GetDigitMoreThen(%d, %t) = %d, expected %d", sum, withAux, result, expectedResult)
+	}
+
+	// Test case 4: sum less than 0
+	sum = -1
+	withAux = true
+	expectedResult = -1
+
+	result = src.GetDigitMoreThen(sum, withAux)
+	if result != expectedResult {
+		t.Errorf("GetDigitMoreThen(%d, %t) = %d, expected %d", sum, withAux, result, expectedResult)
+	}
+}
