@@ -113,3 +113,25 @@ func TestGenerateRandomDoc(t *testing.T) {
 		}
 	}
 }
+
+func TestCalculatorCNH(t *testing.T) {
+	doc := "12345678901"
+	first := 2
+	incrementType := "increment"
+
+	result, err := src.CalculatorCNH(doc, first, incrementType)
+	if err != nil {
+		t.Errorf("CalculatorCNH(%q, %d, %q) returned an error: %v", doc, first, incrementType, err)
+	}
+
+	expectedResult := 330
+	if result != expectedResult {
+		t.Errorf("CalculatorCNH(%q, %d, %q) = %d, expected %d", doc, first, incrementType, result, expectedResult)
+	}
+
+	incrementType = "invalid"
+	_, err = src.CalculatorCNH(doc, first, incrementType)
+	if err == nil {
+		t.Errorf("CalculatorCNH(%q, %d, %q) did not return an error for invalid incrementType", doc, first, incrementType)
+	}
+}
