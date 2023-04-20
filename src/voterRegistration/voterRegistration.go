@@ -114,7 +114,16 @@ Format is to format the Voter Registration
   - @return {string}
 */
 func Format(voterRegistration string) (string, error) {
-	return "", nil
+	if err := IsValid(voterRegistration); err != nil {
+		return "", err
+	}
+
+	uf := codeToUf[voterRegistration[8:10]]
+	if uf == "" {
+		return "", errors.New("Invalid UF")
+	}
+
+	return voterRegistration[0:4] + " " + voterRegistration[4:8] + " " + voterRegistration[8:12], nil
 }
 
 /*
