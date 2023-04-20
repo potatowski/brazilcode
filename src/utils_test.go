@@ -1,7 +1,9 @@
 package src_test
 
 import (
+	"math/rand"
 	"testing"
+	"time"
 
 	"github.com/potatowski/brazilcode/src"
 )
@@ -89,5 +91,114 @@ func TestRemoveChar(t *testing.T) {
 	expected = ""
 	if result != expected {
 		t.Errorf("RemoveChar(\"\") = %s; expected %s", result, expected)
+	}
+}
+
+func TestGenerateRandomDoc(t *testing.T) {
+	rand.Seed(time.Now().UnixNano())
+
+	length := 10
+	numberInRand := 10
+	doc := src.GenerateRandomDoc(length, numberInRand)
+
+	expectedLen := length
+	if len(doc) != expectedLen {
+		t.Errorf("GenerateRandomDoc() = %q, expected length %d", doc, expectedLen)
+	}
+
+	for _, char := range doc {
+		if !('0' <= char && char <= '9') {
+			t.Errorf("GenerateRandomDoc() = %q, contains non-digit character %q", doc, char)
+			break
+		}
+	}
+}
+
+func TestCalculatorCNH(t *testing.T) {
+	doc := "12345678901"
+	first := 2
+	incrementType := "increment"
+
+	result, err := src.CalculatorCNH(doc, first, incrementType)
+	if err != nil {
+		t.Errorf("CalculatorCNH(%q, %d, %q) returned an error: %v", doc, first, incrementType, err)
+	}
+
+	expectedResult := 330
+	if result != expectedResult {
+		t.Errorf("CalculatorCNH(%q, %d, %q) = %d, expected %d", doc, first, incrementType, result, expectedResult)
+	}
+
+	incrementType = "invalid"
+	_, err = src.CalculatorCNH(doc, first, incrementType)
+	if err == nil {
+		t.Errorf("CalculatorCNH(%q, %d, %q) did not return an error for invalid incrementType", doc, first, incrementType)
+	}
+}
+
+func TestCalculateCNHDVs(t *testing.T) {
+	// Test case 1: valid CNH
+	cnh := "97625655678"
+
+	dv1, dv2, err := src.CalculateCNHDVs(cnh)
+	if err != nil {
+		t.Errorf("CalculateCNHDVs(%q) returned an error: %v", cnh, err)
+	}
+
+	expectedDv1 := 7
+	if dv1 != expectedDv1 {
+		t.Errorf("CalculateCNHDVs(%q) dv1 = %d, expected %d", cnh, dv1, expectedDv1)
+	}
+	expectedDv2 := 8
+	if dv2 != expectedDv2 {
+		t.Errorf("CalculateCNHDVs(%q) dv2 = %d, expected %d", cnh, dv2, expectedDv2)
+	}
+
+	// Test case 2: invalid CNH length
+	cnh = "12345678"
+	_, _, err = src.CalculateCNHDVs(cnh)
+	if err == nil {
+		t.Errorf("CalculateCNHDVs(%q) did not return an error for invalid CNH", cnh)
+	}
+}
+
+func TestGetDigitMoreThen(t *testing.T) {
+	// Test case 1: valid sum with aux
+	sum := 20
+	withAux := true
+	expectedResult := 9
+
+	result := src.GetDigitMoreThen(sum, withAux)
+	if result != expectedResult {
+		t.Errorf("GetDigitMoreThen(%d, %t) = %d, expected %d", sum, withAux, result, expectedResult)
+	}
+
+	// Test case 2: valid sum without aux
+	sum = 20
+	withAux = false
+	expectedResult = 9
+
+	result = src.GetDigitMoreThen(sum, withAux)
+	if result != expectedResult {
+		t.Errorf("GetDigitMoreThen(%d, %t) = %d, expected %d", sum, withAux, result, expectedResult)
+	}
+
+	// Test case 3: digit check more than 9
+	sum = 21
+	withAux = false
+	expectedResult = 0
+	result = src.GetDigitMoreThen(sum, withAux)
+	if result != expectedResult {
+		t.Errorf("GetDigitMoreThen(%d, %t) = %d, expected %d", sum, withAux, result, expectedResult)
+	}
+
+	// Test case 4: sum less than 0
+	sum = -1
+	withAux = true
+	expectedResult = -1
+
+	result = src.GetDigitMoreThen(sum, withAux)
+	if result != expectedResult {
+		t.Errorf("GetDigitMoreThen(%d, %t) = %d, expected %d", sum, withAux, result, expectedResult)
 	}
 }
