@@ -92,7 +92,7 @@ func IsValid(voterRegistration string) error {
 	dv1 := src.GetDigitMoreThen(sum, false)
 	if dv1 != int(voterRegistration[10]-'0') {
 		fmt.Println(dv1, voterRegistration[10]-'0')
-		return errors.New("Invalid Voter Registration a")
+		return errors.New("Invalid Voter Registration")
 	}
 
 	sum, err = calc(voterRegistration[8:11], 7, 9)
@@ -102,7 +102,7 @@ func IsValid(voterRegistration string) error {
 
 	dv2 := src.GetDigitMoreThen(sum, false)
 	if dv2 != int(voterRegistration[11]-'0') {
-		return errors.New("Invalid Voter Registration b")
+		return errors.New("Invalid Voter Registration")
 	}
 
 	return nil
