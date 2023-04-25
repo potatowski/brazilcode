@@ -7,6 +7,26 @@ import (
 	"github.com/potatowski/brazilcode/src/voterRegistration"
 )
 
+var (
+	//Errors about CNPJ
+	ErrCNPJInvalid       = cnpj.ErrCNPJInvalid
+	ErrCNPJInvalidLength = cnpj.ErrCNPJInvalidLength
+
+	//Errors about CPF
+	ErrCPFInvalidLength = cpf.ErrCPFInvalidLength
+	ErrCPFInvalid       = cpf.ErrCPFInvalid
+
+	//Errors about CNH
+	ErrCNHInvalid       = cnh.ErrCNHInvalid
+	ErrCNHInvalidLength = cnh.ErrCNHInvalidLength
+
+	//Errors about Voter Registration
+	ErrVoterRegistrationInvalid       = voterRegistration.ErrVoterRegistrationInvalid
+	ErrVoterRegistrationInvalidLength = voterRegistration.ErrVoterRegistrationInvalidLength
+	ErrVoterRegistrationInvalidUF     = voterRegistration.ErrVoterRegistrationInvalidUF
+	ErrVoterRegistrationLimit         = voterRegistration.ErrVoterRegistrationLimit
+)
+
 func CNPJIsValid(doc string) error {
 	return cnpj.IsValid(doc)
 }
