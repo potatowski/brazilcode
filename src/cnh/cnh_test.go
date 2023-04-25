@@ -1,7 +1,6 @@
 package cnh
 
 import (
-	"fmt"
 	"testing"
 )
 
@@ -19,28 +18,24 @@ func TestIsValid(t *testing.T) {
 		{
 			name:     "Invalid CNH - wrong length",
 			doc:      "3439000818",
-			expected: fmt.Errorf("Invalid CNH"),
+			expected: ErrCNHInvalidLength,
 		},
 		{
 			name:     "Invalid CNH - wrong first digit",
 			doc:      "34390008118",
-			expected: fmt.Errorf("Invalid CNH"),
+			expected: ErrCNHInvalid,
 		},
 		{
 			name:     "Invalid CNH - wrong second digit",
 			doc:      "34390008181",
-			expected: fmt.Errorf("Invalid CNH"),
+			expected: ErrCNHInvalid,
 		},
 	}
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
 			err := IsValid(tc.doc)
-			if err == nil && tc.expected != nil {
-				t.Errorf("Expected error to be '%v' but got '%v'", tc.expected, err)
-			}
-
-			if err != nil && err.Error() != tc.expected.Error() {
+			if err != tc.expected {
 				t.Errorf("Expected error to be '%v' but got '%v'", tc.expected, err)
 			}
 		})

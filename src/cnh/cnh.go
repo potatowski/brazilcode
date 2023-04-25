@@ -6,6 +6,11 @@ import (
 	"github.com/potatowski/brazilcode/src"
 )
 
+var (
+	ErrCNHInvalidLength = fmt.Errorf("Invalid CNH length")
+	ErrCNHInvalid       = fmt.Errorf("Invalid CNH")
+)
+
 /*
 IsValid check if the CNH is valid
   - @param {string}
@@ -14,7 +19,7 @@ IsValid check if the CNH is valid
 func IsValid(doc string) error {
 	doc = src.RemoveChar(doc)
 	if len(doc) != 11 {
-		return fmt.Errorf("Invalid CNH")
+		return ErrCNHInvalidLength
 	}
 
 	dv1, dv2, err := src.CalculateCNHDVs(doc)
@@ -23,7 +28,7 @@ func IsValid(doc string) error {
 	}
 
 	if dv1 != int(doc[9]-'0') || dv2 != int(doc[10]-'0') {
-		return fmt.Errorf("Invalid CNH")
+		return ErrCNHInvalid
 	}
 
 	return nil
