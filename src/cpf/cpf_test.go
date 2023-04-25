@@ -1,7 +1,6 @@
 package cpf
 
 import (
-	"errors"
 	"testing"
 )
 
@@ -19,28 +18,24 @@ func TestIsValid(t *testing.T) {
 		{
 			name:     "Invalid CPF - wrong length",
 			doc:      "1234567890",
-			expected: errors.New("Invalid CPF"),
+			expected: ErrCPFInvalidLength,
 		},
 		{
 			name:     "Invalid CPF - wrong first digit",
 			doc:      "12345678919",
-			expected: errors.New("Invalid CPF"),
+			expected: ErrCPFInvalid,
 		},
 		{
 			name:     "Invalid CPF - wrong second digit",
 			doc:      "12345678908",
-			expected: errors.New("Invalid CPF"),
+			expected: ErrCPFInvalid,
 		},
 	}
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
 			err := IsValid(tc.doc)
-			if err == nil && tc.expected != nil {
-				t.Errorf("Expected error to be '%v' but got '%v'", tc.expected, err)
-			}
-
-			if err != nil && err.Error() != tc.expected.Error() {
+			if err != tc.expected {
 				t.Errorf("Expected error to be '%v' but got '%v'", tc.expected, err)
 			}
 		})
@@ -64,30 +59,26 @@ func TestFormat(t *testing.T) {
 			name:          "Invalid CPF - wrong length",
 			doc:           "1234567890",
 			expected:      "",
-			expectedError: errors.New("Invalid CPF"),
+			expectedError: ErrCPFInvalidLength,
 		},
 		{
 			name:          "Invalid CPF - wrong first digit",
 			doc:           "12345678919",
 			expected:      "",
-			expectedError: errors.New("Invalid CPF"),
+			expectedError: ErrCPFInvalid,
 		},
 		{
 			name:          "Invalid CPF - wrong second digit",
 			doc:           "12345678908",
 			expected:      "",
-			expectedError: errors.New("Invalid CPF"),
+			expectedError: ErrCPFInvalid,
 		},
 	}
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
 			result, err := Format(tc.doc)
-			if err == nil && tc.expectedError != nil {
-				t.Errorf("Expected error to be '%v' but got '%v'", tc.expectedError, err)
-			}
-
-			if err != nil && err.Error() != tc.expectedError.Error() {
+			if err != nil && err != tc.expectedError {
 				t.Errorf("Expected error to be '%v' but got '%v'", tc.expectedError, err)
 			}
 

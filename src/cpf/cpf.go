@@ -7,6 +7,11 @@ import (
 	"github.com/potatowski/brazilcode/src"
 )
 
+var (
+	ErrCPFInvalidLength = errors.New("Invalid CPF length")
+	ErrCPFInvalid       = errors.New("Invalid CPF")
+)
+
 /*
 IsValid check if the CPF is valid
   - @param {string} doc
@@ -15,7 +20,7 @@ IsValid check if the CPF is valid
 func IsValid(doc string) error {
 	doc = src.RemoveChar(doc)
 	if len(doc) != 11 {
-		return errors.New("Invalid CPF")
+		return ErrCPFInvalidLength
 	}
 
 	var sum int
@@ -25,7 +30,7 @@ func IsValid(doc string) error {
 
 	firstDigit := src.GetDigit(sum)
 	if firstDigit != int(doc[9]-'0') {
-		return errors.New("Invalid CPF")
+		return ErrCPFInvalid
 	}
 
 	sum = 0
@@ -36,7 +41,7 @@ func IsValid(doc string) error {
 	secondDigit := src.GetDigit(sum)
 
 	if secondDigit != int(doc[10]-'0') {
-		return errors.New("Invalid CPF")
+		return ErrCPFInvalid
 	}
 
 	return nil
