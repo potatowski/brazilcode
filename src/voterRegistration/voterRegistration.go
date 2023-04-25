@@ -69,6 +69,13 @@ var codeToUf = map[string]string{
 	"28": "ZZ",
 }
 
+var (
+	ErrVoterRegistrationInvalid       = errors.New("Invalid Voter Registration")
+	ErrVoterRegistrationInvalidLength = errors.New("Invalid Voter Registration length")
+	ErrVoterRegistrationInvalidUF     = errors.New("Invalid UF")
+	ErrVoterRegistrationLimit         = errors.New("Invalid Limit")
+)
+
 /*
 IsValid check if the Voter Registration is valid
   - @param {string}
@@ -77,12 +84,12 @@ IsValid check if the Voter Registration is valid
 func IsValid(voterRegistration string) error {
 	voterRegistration = src.RemoveChar(voterRegistration)
 	if len(voterRegistration) != 12 {
-		return errors.New("Voter Registration with invalid length")
+		return ErrVoterRegistrationInvalidLength
 	}
 
 	uf := codeToUf[voterRegistration[8:10]]
 	if uf == "" {
-		return errors.New("Invalid UF")
+		return ErrVoterRegistrationInvalidUF
 	}
 
 	sum, err := calc(voterRegistration[:8], 2, 9)
@@ -92,7 +99,7 @@ func IsValid(voterRegistration string) error {
 	dv1 := src.GetDigitMoreThen(sum, false)
 	if dv1 != int(voterRegistration[10]-'0') {
 		fmt.Println(dv1, voterRegistration[10]-'0')
-		return errors.New("Invalid Voter Registration")
+		return ErrVoterRegistrationInvalid
 	}
 
 	sum, err = calc(voterRegistration[8:11], 7, 9)
@@ -102,7 +109,7 @@ func IsValid(voterRegistration string) error {
 
 	dv2 := src.GetDigitMoreThen(sum, false)
 	if dv2 != int(voterRegistration[11]-'0') {
-		return errors.New("Invalid Voter Registration")
+		return ErrVoterRegistrationInvalid
 	}
 
 	return nil
@@ -120,7 +127,7 @@ func Format(voterRegistration string) (string, error) {
 
 	uf := codeToUf[voterRegistration[8:10]]
 	if uf == "" {
-		return "", errors.New("Invalid UF")
+		return "", ErrVoterRegistrationInvalidUF
 	}
 
 	return voterRegistration[0:4] + " " + voterRegistration[4:8] + " " + voterRegistration[8:12], nil
@@ -145,7 +152,7 @@ func Generate(uf string) (string, error) {
 
 	ufRegister := ufToCode[uf]
 	if ufRegister == "" {
-		return "", errors.New("Invalid UF")
+		return "", ErrVoterRegistrationInvalidUF
 	}
 
 	ufRegister += fmt.Sprintf("%d", dv1)
@@ -169,11 +176,11 @@ func calc(voterRegistration string, first, limit int) (int, error) {
 	var sum int
 
 	if len(voterRegistration) == 0 {
-		return 0, errors.New("Voter Registration with invalid length")
+		return 0, ErrVoterRegistrationInvalidLength
 	}
 
 	if first > limit {
-		return 0, errors.New("Invalid limit")
+		return 0, ErrVoterRegistrationLimit
 	}
 
 	for _, value := range voterRegistration {
