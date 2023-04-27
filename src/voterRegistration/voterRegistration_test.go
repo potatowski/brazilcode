@@ -1,7 +1,6 @@
 package voterRegistration
 
 import (
-	"errors"
 	"testing"
 )
 
@@ -19,33 +18,30 @@ func TestIsValid(t *testing.T) {
 		{
 			name:              "voter registration with invalid length",
 			voterRegistration: "35606103015",
-			expectedError:     errors.New("Voter Registration with invalid length"),
+			expectedError:     ErrVoterRegistrationInvalidLength,
 		},
 		{
 			name:              "voter registration with invalid UF",
 			voterRegistration: "356061032959",
-			expectedError:     errors.New("Invalid UF"),
+			expectedError:     ErrVoterRegistrationInvalidUF,
 		},
 		{
 			name:              "voter registration with invalid check digit 1",
 			voterRegistration: "356061030119",
-			expectedError:     errors.New("Invalid Voter Registration"),
+			expectedError:     ErrVoterRegistrationInvalid,
 		},
 		{
 			name:              "voter registration with invalid check digit 2",
 			voterRegistration: "356061030150",
-			expectedError:     errors.New("Invalid Voter Registration"),
+			expectedError:     ErrVoterRegistrationInvalid,
 		},
 	}
 
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
 			err := IsValid(test.voterRegistration)
-			if err == nil && test.expectedError == nil {
-				return
-			}
 
-			if err.Error() != test.expectedError.Error() {
+			if err != test.expectedError {
 				t.Errorf("Expected error %v but got %v", test.expectedError, err)
 			}
 		})
@@ -69,32 +65,32 @@ func TestFormat(t *testing.T) {
 			name:              "voter registration with invalid length",
 			voterRegistration: "12345678901",
 			expectedResult:    "",
-			expectedError:     errors.New("Voter Registration with invalid length"),
+			expectedError:     ErrVoterRegistrationInvalidLength,
 		},
 		{
 			name:              "voter registration with invalid UF",
 			voterRegistration: "356061032959",
 			expectedResult:    "",
-			expectedError:     errors.New("Invalid UF"),
+			expectedError:     ErrVoterRegistrationInvalidUF,
 		},
 		{
 			name:              "voter registration with invalid check digit 1",
 			voterRegistration: "356061030119",
 			expectedResult:    "",
-			expectedError:     errors.New("Invalid Voter Registration"),
+			expectedError:     ErrVoterRegistrationInvalid,
 		},
 		{
 			name:              "voter registration with invalid check digit 2",
 			voterRegistration: "356061030158",
 			expectedResult:    "",
-			expectedError:     errors.New("Invalid Voter Registration"),
+			expectedError:     ErrVoterRegistrationInvalid,
 		},
 	}
 
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
 			result, err := Format(test.voterRegistration)
-			if err != nil && err.Error() != test.expectedError.Error() {
+			if err != test.expectedError {
 				t.Errorf("Expected error %v but got %v", test.expectedError, err)
 			}
 
