@@ -7,6 +7,11 @@ import (
 	"github.com/potatowski/brazilcode/src"
 )
 
+var (
+	ErrCNPJInvalid       = errors.New("Invalid CNPJ")
+	ErrCNPJInvalidLength = errors.New("Invalid CNPJ length")
+)
+
 /*
 IsValid check if the CNPJ is valid
   - @param {string} doc
@@ -15,7 +20,7 @@ IsValid check if the CNPJ is valid
 func IsValid(doc string) error {
 	doc = src.RemoveChar(doc)
 	if len(doc) != 14 {
-		return errors.New("Invalid CNPJ")
+		return ErrCNPJInvalidLength
 	}
 
 	firstDigitCheck := doc[12] - '0'
@@ -30,7 +35,7 @@ func IsValid(doc string) error {
 
 	firstDigit := src.GetDigit(sum)
 	if firstDigit != int(firstDigitCheck) {
-		return errors.New("Invalid CNPJ")
+		return ErrCNPJInvalid
 	}
 	doc += fmt.Sprintf("%d", firstDigit)
 
@@ -41,7 +46,7 @@ func IsValid(doc string) error {
 
 	secondDigit := src.GetDigit(sum)
 	if secondDigit != int(secondDigitCheck) {
-		return errors.New("Invalid CNPJ")
+		return ErrCNPJInvalid
 	}
 
 	return nil
