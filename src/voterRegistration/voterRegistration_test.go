@@ -3,7 +3,7 @@ package voterRegistration
 import (
 	"testing"
 
-	iface "github.com/potatowski/brazilcode/src/interface"
+	iface "github.com/potatowski/brazilcode/v2/src/interface"
 )
 
 var doc iface.Document = VoterRegistration{}

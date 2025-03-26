@@ -3,11 +3,11 @@ package brazilcode
 import (
 	"errors"
 
-	"github.com/potatowski/brazilcode/src/cnh"
-	"github.com/potatowski/brazilcode/src/cnpj"
-	"github.com/potatowski/brazilcode/src/cpf"
-	iface "github.com/potatowski/brazilcode/src/interface"
-	"github.com/potatowski/brazilcode/src/voterRegistration"
+	"github.com/potatowski/brazilcode/v2/src/cnh"
+	"github.com/potatowski/brazilcode/v2/src/cnpj"
+	"github.com/potatowski/brazilcode/v2/src/cpf"
+	iface "github.com/potatowski/brazilcode/v2/src/interface"
+	"github.com/potatowski/brazilcode/v2/src/voterRegistration"
 )
 
 var CPF = cpf.CPF{}

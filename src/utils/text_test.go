@@ -5,7 +5,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/potatowski/brazilcode/src/utils"
+	"github.com/potatowski/brazilcode/v2/src/utils"
 )
 
 func TestRemoveChar(t *testing.T) {

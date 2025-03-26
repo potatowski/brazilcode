@@ -3,7 +3,7 @@ package utils_test
 import (
 	"testing"
 
-	"github.com/potatowski/brazilcode/src/utils"
+	"github.com/potatowski/brazilcode/v2/src/utils"
 )
 
 func TestCalculator(t *testing.T) {
