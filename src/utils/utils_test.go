@@ -1,16 +1,16 @@
-package src_test
+package utils_test
 
 import (
 	"math/rand"
 	"testing"
 	"time"
 
-	"github.com/potatowski/brazilcode/src"
+	"github.com/potatowski/brazilcode/src/utils"
 )
 
 func TestCalculator(t *testing.T) {
 	// Test case 1: doc with less than 10 characters and first positive
-	result, err := src.Calculator("1234", 4)
+	result, err := utils.Calculator("1234", 4)
 	expected := 20
 	if err != nil {
 		t.Errorf("unexpected error: %v", err)
@@ -20,7 +20,7 @@ func TestCalculator(t *testing.T) {
 	}
 
 	// Test case 2: doc with more than 10 characters and first positive
-	result, err = src.Calculator("12345678901", 1)
+	result, err = utils.Calculator("12345678901", 1)
 	expected = 244
 	if err != nil {
 		t.Errorf("unexpected error: %v", err)
@@ -30,19 +30,19 @@ func TestCalculator(t *testing.T) {
 	}
 
 	// Test case 3: document equals ""
-	_, err = src.Calculator("", 1)
+	_, err = utils.Calculator("", 1)
 	if err == nil {
 		t.Errorf("expected an error about document")
 	}
 
 	// Test case 4: param fisrt more than 0
-	_, err = src.Calculator("12345", -2)
+	_, err = utils.Calculator("12345", -2)
 	if err == nil {
 		t.Errorf("expected an error about first more than 0")
 	}
 
 	// Test case 5: param first equals 0
-	_, err = src.Calculator("12345", 0)
+	_, err = utils.Calculator("12345", 0)
 	if err == nil {
 		t.Errorf("expected an error about first equals 0")
 	}
@@ -50,14 +50,14 @@ func TestCalculator(t *testing.T) {
 
 func TestGetDigit(t *testing.T) {
 	// Test case 1: sum with rest less than 2
-	result := src.GetDigit(287)
+	result := utils.GetDigit(287)
 	expected := 0
 	if result != expected {
 		t.Errorf("GetDigit(22) = %d; expected %d", result, expected)
 	}
 
 	// Test case 2: sum with rest more than or equals 2
-	result = src.GetDigit(237)
+	result = utils.GetDigit(237)
 	expected = 5
 	if result != expected {
 		t.Errorf("GetDigit(27) = %d; expected %d", result, expected)
@@ -66,28 +66,28 @@ func TestGetDigit(t *testing.T) {
 
 func TestRemoveChar(t *testing.T) {
 	// Test case 1: str with only numbers
-	result := src.RemoveChar("12345")
+	result := utils.RemoveChar("12345")
 	expected := "12345"
 	if result != expected {
 		t.Errorf("RemoveChar(\"12345\") = %s; expected %s", result, expected)
 	}
 
 	// Test case 2: str with only letters
-	result = src.RemoveChar("abcde")
+	result = utils.RemoveChar("abcde")
 	expected = ""
 	if result != expected {
 		t.Errorf("RemoveChar(\"abcde\") = %s; expected %s", result, expected)
 	}
 
 	// Test case 3: str with numbers and letters
-	result = src.RemoveChar("1a2b3c4d5e")
+	result = utils.RemoveChar("1a2b3c4d5e")
 	expected = "12345"
 	if result != expected {
 		t.Errorf("RemoveChar(\"1a2b3c4d5e\") = %s; expected %s", result, expected)
 	}
 
 	// Test case 4: str equals ""
-	result = src.RemoveChar("")
+	result = utils.RemoveChar("")
 	expected = ""
 	if result != expected {
 		t.Errorf("RemoveChar(\"\") = %s; expected %s", result, expected)
@@ -99,7 +99,7 @@ func TestGenerateRandomDoc(t *testing.T) {
 
 	length := 10
 	numberInRand := 10
-	doc := src.GenerateRandomDoc(length, numberInRand)
+	doc := utils.GenerateRandomDoc(length, numberInRand)
 
 	expectedLen := length
 	if len(doc) != expectedLen {
@@ -119,7 +119,7 @@ func TestCalculatorCNH(t *testing.T) {
 	first := 2
 	incrementType := "increment"
 
-	result, err := src.CalculatorCNH(doc, first, incrementType)
+	result, err := utils.CalculatorCNH(doc, first, incrementType)
 	if err != nil {
 		t.Errorf("CalculatorCNH(%q, %d, %q) returned an error: %v", doc, first, incrementType, err)
 	}
@@ -130,7 +130,7 @@ func TestCalculatorCNH(t *testing.T) {
 	}
 
 	incrementType = "invalid"
-	_, err = src.CalculatorCNH(doc, first, incrementType)
+	_, err = utils.CalculatorCNH(doc, first, incrementType)
 	if err == nil {
 		t.Errorf("CalculatorCNH(%q, %d, %q) did not return an error for invalid incrementType", doc, first, incrementType)
 	}
@@ -140,7 +140,7 @@ func TestCalculateCNHDVs(t *testing.T) {
 	// Test case 1: valid CNH
 	cnh := "97625655678"
 
-	dv1, dv2, err := src.CalculateCNHDVs(cnh)
+	dv1, dv2, err := utils.CalculateCNHDVs(cnh)
 	if err != nil {
 		t.Errorf("CalculateCNHDVs(%q) returned an error: %v", cnh, err)
 	}
@@ -156,7 +156,7 @@ func TestCalculateCNHDVs(t *testing.T) {
 
 	// Test case 2: invalid CNH length
 	cnh = "12345678"
-	_, _, err = src.CalculateCNHDVs(cnh)
+	_, _, err = utils.CalculateCNHDVs(cnh)
 	if err == nil {
 		t.Errorf("CalculateCNHDVs(%q) did not return an error for invalid CNH", cnh)
 	}
@@ -168,7 +168,7 @@ func TestGetDigitMoreThen(t *testing.T) {
 	withAux := true
 	expectedResult := 9
 
-	result := src.GetDigitMoreThen(sum, withAux)
+	result := utils.GetDigitMoreThen(sum, withAux)
 	if result != expectedResult {
 		t.Errorf("GetDigitMoreThen(%d, %t) = %d, expected %d", sum, withAux, result, expectedResult)
 	}
@@ -178,7 +178,7 @@ func TestGetDigitMoreThen(t *testing.T) {
 	withAux = false
 	expectedResult = 9
 
-	result = src.GetDigitMoreThen(sum, withAux)
+	result = utils.GetDigitMoreThen(sum, withAux)
 	if result != expectedResult {
 		t.Errorf("GetDigitMoreThen(%d, %t) = %d, expected %d", sum, withAux, result, expectedResult)
 	}
@@ -187,7 +187,7 @@ func TestGetDigitMoreThen(t *testing.T) {
 	sum = 21
 	withAux = false
 	expectedResult = 0
-	result = src.GetDigitMoreThen(sum, withAux)
+	result = utils.GetDigitMoreThen(sum, withAux)
 	if result != expectedResult {
 		t.Errorf("GetDigitMoreThen(%d, %t) = %d, expected %d", sum, withAux, result, expectedResult)
 	}
@@ -197,7 +197,7 @@ func TestGetDigitMoreThen(t *testing.T) {
 	withAux = true
 	expectedResult = -1
 
-	result = src.GetDigitMoreThen(sum, withAux)
+	result = utils.GetDigitMoreThen(sum, withAux)
 	if result != expectedResult {
 		t.Errorf("GetDigitMoreThen(%d, %t) = %d, expected %d", sum, withAux, result, expectedResult)
 	}
