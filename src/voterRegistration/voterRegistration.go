@@ -4,7 +4,7 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/potatowski/brazilcode/src"
+	"github.com/potatowski/brazilcode/src/utils"
 )
 
 var ufToCode = map[string]string{
@@ -70,10 +70,10 @@ var codeToUf = map[string]string{
 }
 
 var (
-	ErrVoterRegistrationInvalid       = errors.New("Invalid Voter Registration")
-	ErrVoterRegistrationInvalidLength = errors.New("Invalid Voter Registration length")
-	ErrVoterRegistrationInvalidUF     = errors.New("Invalid UF")
-	ErrVoterRegistrationLimit         = errors.New("Invalid Limit")
+	ErrVoterRegistrationInvalid       = errors.New("invalid Voter Registration")
+	ErrVoterRegistrationInvalidLength = errors.New("invalid Voter Registration length")
+	ErrVoterRegistrationInvalidUF     = errors.New("invalid UF")
+	ErrVoterRegistrationLimit         = errors.New("invalid Limit")
 )
 
 /*
@@ -82,7 +82,7 @@ IsValid check if the Voter Registration is valid
   - @return {error}
 */
 func IsValid(voterRegistration string) error {
-	voterRegistration = src.RemoveChar(voterRegistration)
+	voterRegistration = utils.RemoveChar(voterRegistration)
 	if len(voterRegistration) != 12 {
 		return ErrVoterRegistrationInvalidLength
 	}
@@ -96,7 +96,7 @@ func IsValid(voterRegistration string) error {
 	if err != nil {
 		return err
 	}
-	dv1 := src.GetDigitMoreThen(sum, false)
+	dv1 := utils.GetDigitMoreThen(sum, false)
 	if dv1 != int(voterRegistration[10]-'0') {
 		fmt.Println(dv1, voterRegistration[10]-'0')
 		return ErrVoterRegistrationInvalid
@@ -107,7 +107,7 @@ func IsValid(voterRegistration string) error {
 		return err
 	}
 
-	dv2 := src.GetDigitMoreThen(sum, false)
+	dv2 := utils.GetDigitMoreThen(sum, false)
 	if dv2 != int(voterRegistration[11]-'0') {
 		return ErrVoterRegistrationInvalid
 	}
@@ -139,13 +139,13 @@ Generate is to create a random Voter Registration
   - @return {string, error}
 */
 func Generate(uf string) (string, error) {
-	voter := src.GenerateRandomDoc(8, 9)
+	voter := utils.GenerateRandomDoc(8, 9)
 	sum, err := calc(voter, 2, 9)
 	if err != nil {
 		return "", err
 	}
 
-	dv1 := src.GetDigitMoreThen(sum, false)
+	dv1 := utils.GetDigitMoreThen(sum, false)
 	if uf == "" {
 		uf = getRandomUF()
 	}
@@ -162,7 +162,7 @@ func Generate(uf string) (string, error) {
 		return "", err
 	}
 
-	dv2 := src.GetDigitMoreThen(sum, false)
+	dv2 := utils.GetDigitMoreThen(sum, false)
 	voter += fmt.Sprintf("%d", dv2)
 	err = IsValid(voter)
 	if err != nil {

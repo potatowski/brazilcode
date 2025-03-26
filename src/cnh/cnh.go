@@ -3,12 +3,12 @@ package cnh
 import (
 	"fmt"
 
-	"github.com/potatowski/brazilcode/src"
+	"github.com/potatowski/brazilcode/src/utils"
 )
 
 var (
-	ErrCNHInvalidLength = fmt.Errorf("Invalid CNH length")
-	ErrCNHInvalid       = fmt.Errorf("Invalid CNH")
+	ErrCNHInvalidLength = fmt.Errorf("invalid CNH length")
+	ErrCNHInvalid       = fmt.Errorf("invalid CNH")
 )
 
 /*
@@ -17,12 +17,12 @@ IsValid check if the CNH is valid
   - @return {error}
 */
 func IsValid(doc string) error {
-	doc = src.RemoveChar(doc)
+	doc = utils.RemoveChar(doc)
 	if len(doc) != 11 {
 		return ErrCNHInvalidLength
 	}
 
-	dv1, dv2, err := src.CalculateCNHDVs(doc)
+	dv1, dv2, err := utils.CalculateCNHDVs(doc)
 	if err != nil {
 		return err
 	}
@@ -40,8 +40,8 @@ Generate is to create a random CNH
   - @return {error}
 */
 func Generate() (string, error) {
-	cnh := src.GenerateRandomDoc(9, 10)
-	dv1, dv2, err := src.CalculateCNHDVs(cnh)
+	cnh := utils.GenerateRandomDoc(9, 10)
+	dv1, dv2, err := utils.CalculateCNHDVs(cnh)
 	if err != nil {
 		return "", err
 	}

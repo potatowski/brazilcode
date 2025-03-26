@@ -4,12 +4,12 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/potatowski/brazilcode/src"
+	"github.com/potatowski/brazilcode/src/utils"
 )
 
 var (
-	ErrCPFInvalidLength = errors.New("Invalid CPF length")
-	ErrCPFInvalid       = errors.New("Invalid CPF")
+	ErrCPFInvalidLength = errors.New("invalid CPF length")
+	ErrCPFInvalid       = errors.New("invalid CPF")
 )
 
 /*
@@ -18,7 +18,7 @@ IsValid check if the CPF is valid
   - @return {error}
 */
 func IsValid(doc string) error {
-	doc = src.RemoveChar(doc)
+	doc = utils.RemoveChar(doc)
 	if len(doc) != 11 {
 		return ErrCPFInvalidLength
 	}
@@ -28,7 +28,7 @@ func IsValid(doc string) error {
 		sum += int(doc[i]-'0') * (10 - i)
 	}
 
-	firstDigit := src.GetDigit(sum)
+	firstDigit := utils.GetDigit(sum)
 	if firstDigit != int(doc[9]-'0') {
 		return ErrCPFInvalid
 	}
@@ -38,7 +38,7 @@ func IsValid(doc string) error {
 		sum += int(doc[i]-'0') * (11 - i)
 	}
 
-	secondDigit := src.GetDigit(sum)
+	secondDigit := utils.GetDigit(sum)
 
 	if secondDigit != int(doc[10]-'0') {
 		return ErrCPFInvalid
@@ -65,21 +65,21 @@ Generate is to create a random CPF
   - @return {string, error}
 */
 func Generate() (string, error) {
-	cpf := src.GenerateRandomDoc(9, 9)
+	cpf := utils.GenerateRandomDoc(9, 9)
 
-	sum, err := src.Calculator(cpf, 10)
+	sum, err := utils.Calculator(cpf, 10)
 	if err != nil {
 		return "", err
 	}
 
-	cpf += fmt.Sprintf("%d", src.GetDigit(sum))
+	cpf += fmt.Sprintf("%d", utils.GetDigit(sum))
 
-	sum, err = src.Calculator(cpf, 11)
+	sum, err = utils.Calculator(cpf, 11)
 	if err != nil {
 		return "", err
 	}
 
-	cpf += fmt.Sprintf("%d", src.GetDigit(sum))
+	cpf += fmt.Sprintf("%d", utils.GetDigit(sum))
 
 	if err := IsValid(cpf); err != nil {
 		return "", err
