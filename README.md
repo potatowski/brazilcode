@@ -6,7 +6,7 @@ This is validator, generator and formats the brazil code as CPF and CNPJ
 - CPF
 - CNPJ
 - CNH
- - VoterRegistration(Título de Eleitor)
+- VoterRegistration(Título de Eleitor)
 
 ## Development
 Import package with command in shell
@@ -25,12 +25,14 @@ import (
 )
 
 func main() {
-	doc, err := brazilcode.CNPJGenerate()
+	doc, err := brazilcode.CNPJ.Generate()
+	// or doc, err := brazilcode.Generate("CNPJ")
 	if err != nil {
 		panic(err)
 	}
 
-	docFormatted, err := brazilcode.CNPJFormat(doc)
+	docFormatted, err := brazilcode.CNPJ.Format(doc)
+	// or docFormatted, err := brazilcode.Format("CNPJ", doc)
 	if err != nil {
 		panic(err)
 	}
