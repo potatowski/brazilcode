@@ -2,9 +2,6 @@ package utils
 
 import (
 	"errors"
-	"fmt"
-	"math/rand"
-	"regexp"
 )
 
 /*
@@ -44,43 +41,6 @@ func Calculator(doc string, first int) (int, error) {
 	}
 
 	return sum, nil
-}
-
-/*
-GetDigit returns the digit of the document
-  - @param {int} sum
-  - @return {int}
-*/
-func GetDigit(sum int) int {
-	rest := sum % 11
-	if rest < 2 {
-		return 0
-	}
-	return 11 - rest
-}
-
-/*
-RemoveChar returns the string without special characters
-  - @param {string} str
-  - @return {string}
-*/
-func RemoveChar(str string) string {
-	return regexp.MustCompile("[^0-9]+").ReplaceAllString(str, "")
-}
-
-/*
-GenerateRandomDoc returns a random document
-  - @param {int} len
-  - @param {int} numberInRand
-  - @return {string}
-*/
-func GenerateRandomDoc(len, numberInRand int) string {
-	var doc string
-	for i := 0; i < len; i++ {
-		doc += fmt.Sprintf("%d", rand.Intn(numberInRand))
-	}
-
-	return doc
 }
 
 /*
@@ -148,24 +108,4 @@ func CalculateCNHDVs(cnh string) (int, int, error) {
 	}
 
 	return dv1, dv2, nil
-}
-
-/*
-GetDigitMoreThen returns the digit of the document
-  - @param {int} sum
-  - @param {bool} withAux
-  - @return {int}
-*/
-func GetDigitMoreThen(sum int, withAux bool) (result int) {
-	digitCheck := sum % 11
-	aux := 0
-	if digitCheck >= 10 {
-		digitCheck = 0
-		if withAux {
-			aux = 2
-		}
-	}
-
-	result = digitCheck - aux*2
-	return result
 }
