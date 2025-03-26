@@ -76,12 +76,14 @@ var (
 	ErrVoterRegistrationLimit         = errors.New("invalid Limit")
 )
 
+type VoterRegistration struct{}
+
 /*
 IsValid check if the Voter Registration is valid
   - @param {string}
   - @return {error}
 */
-func IsValid(voterRegistration string) error {
+func (iDoc VoterRegistration) IsValid(voterRegistration string) error {
 	voterRegistration = utils.RemoveChar(voterRegistration)
 	if len(voterRegistration) != 12 {
 		return ErrVoterRegistrationInvalidLength
@@ -120,8 +122,8 @@ Format is to format the Voter Registration
   - @param {string} voterRegistration
   - @return {string}
 */
-func Format(voterRegistration string) (string, error) {
-	if err := IsValid(voterRegistration); err != nil {
+func (iDoc VoterRegistration) Format(voterRegistration string) (string, error) {
+	if err := iDoc.IsValid(voterRegistration); err != nil {
 		return "", err
 	}
 
@@ -138,7 +140,7 @@ Generate is to create a random Voter Registration
   - @param {string} uf
   - @return {string, error}
 */
-func Generate(uf string) (string, error) {
+func (iDoc VoterRegistration) Generate() (string, error) {
 	voter := utils.GenerateRandomDoc(8, 9)
 	sum, err := calc(voter, 2, 9)
 	if err != nil {
@@ -146,9 +148,7 @@ func Generate(uf string) (string, error) {
 	}
 
 	dv1 := utils.GetDigitMoreThen(sum, false)
-	if uf == "" {
-		uf = getRandomUF()
-	}
+	uf := getRandomUF()
 
 	ufRegister := ufToCode[uf]
 	if ufRegister == "" {
@@ -164,7 +164,7 @@ func Generate(uf string) (string, error) {
 
 	dv2 := utils.GetDigitMoreThen(sum, false)
 	voter += fmt.Sprintf("%d", dv2)
-	err = IsValid(voter)
+	err = iDoc.IsValid(voter)
 	if err != nil {
 		return "", err
 	}
