@@ -3,7 +3,7 @@ package brazilcode_test
 import (
 	"testing"
 
-	"github.com/potatowski/brazilcode"
+	"github.com/potatowski/brazilcode/v2"
 )
 
 func TestIsValid(t *testing.T) {
