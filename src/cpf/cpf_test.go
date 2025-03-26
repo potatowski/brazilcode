@@ -2,7 +2,11 @@ package cpf
 
 import (
 	"testing"
+
+	iface "github.com/potatowski/brazilcode/src/interface"
 )
+
+var doc iface.Document = CPF{}
 
 func TestIsValid(t *testing.T) {
 	testCases := []struct {
@@ -34,7 +38,7 @@ func TestIsValid(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			err := IsValid(tc.doc)
+			err := doc.IsValid(tc.doc)
 			if err != tc.expected {
 				t.Errorf("Expected error to be '%v' but got '%v'", tc.expected, err)
 			}
@@ -77,7 +81,7 @@ func TestFormat(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			result, err := Format(tc.doc)
+			result, err := doc.Format(tc.doc)
 			if err != nil && err != tc.expectedError {
 				t.Errorf("Expected error to be '%v' but got '%v'", tc.expectedError, err)
 			}
@@ -90,12 +94,12 @@ func TestFormat(t *testing.T) {
 }
 
 func TestGenerate(t *testing.T) {
-	cnpj, err := Generate()
+	cpf, err := doc.Generate()
 	if err != nil {
 		t.Errorf("unexpected error: %v", err)
 	}
 
-	if len(cnpj) != 11 {
+	if len(cpf) != 11 {
 		t.Errorf("unexpected result: generated CPF has invalid length")
 	}
 }
