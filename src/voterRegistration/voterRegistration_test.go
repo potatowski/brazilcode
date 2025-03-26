@@ -128,7 +128,7 @@ func TestGenerate(t *testing.T) {
 
 	// Test case 3: empty UF
 	uf = ""
-	voter, err = Generate(uf)
+	_, err = Generate(uf)
 	if err != nil {
 		t.Errorf("unexpected error: %v", err)
 	}
