@@ -11,12 +11,14 @@ var (
 	ErrCNHInvalid       = fmt.Errorf("invalid CNH")
 )
 
+type CNH struct{}
+
 /*
 IsValid check if the CNH is valid
   - @param {string}
   - @return {error}
 */
-func IsValid(doc string) error {
+func (iDoc CNH) IsValid(doc string) error {
 	doc = utils.RemoveChar(doc)
 	if len(doc) != 11 {
 		return ErrCNHInvalidLength
@@ -35,11 +37,25 @@ func IsValid(doc string) error {
 }
 
 /*
+Format is to format the CNH
+  - @param {string} doc
+  - @return {string, error}
+*/
+func (iDoc CNH) Format(doc string) (string, error) {
+	err := iDoc.IsValid(doc)
+	if err != nil {
+		return "", err
+	}
+
+	return doc, nil
+}
+
+/*
 Generate is to create a random CNH
   - @return {string}
   - @return {error}
 */
-func Generate() (string, error) {
+func (iDoc CNH) Generate() (string, error) {
 	cnh := utils.GenerateRandomDoc(9, 10)
 	dv1, dv2, err := utils.CalculateCNHDVs(cnh)
 	if err != nil {
@@ -47,7 +63,7 @@ func Generate() (string, error) {
 	}
 
 	cnh += fmt.Sprintf("%d%d", dv1, dv2)
-	IsValid(cnh)
+	iDoc.IsValid(cnh)
 
 	return cnh, nil
 }
