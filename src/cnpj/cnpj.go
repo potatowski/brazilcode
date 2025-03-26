@@ -12,12 +12,14 @@ var (
 	ErrCNPJInvalidLength = errors.New("invalid CNPJ length")
 )
 
+type CNPJ struct{}
+
 /*
 IsValid check if the CNPJ is valid
   - @param {string} doc
   - @return {error}
 */
-func IsValid(doc string) error {
+func (iDoc CNPJ) IsValid(doc string) error {
 	doc = utils.RemoveChar(doc)
 	if len(doc) != 14 {
 		return ErrCNPJInvalidLength
@@ -57,8 +59,8 @@ Format is to format the CNPJ
   - @param {string} doc
   - @return {string, error}
 */
-func Format(doc string) (string, error) {
-	if err := IsValid(doc); err != nil {
+func (iDoc CNPJ) Format(doc string) (string, error) {
+	if err := iDoc.IsValid(doc); err != nil {
 		return "", err
 	}
 	return doc[:2] + "." + doc[2:5] + "." + doc[5:8] + "/" + doc[8:12] + "-" + doc[12:], nil
@@ -68,7 +70,7 @@ func Format(doc string) (string, error) {
 Generate is to create a random CNPJ
   - @return {string}
 */
-func Generate() (string, error) {
+func (iDoc CNPJ) Generate() (string, error) {
 	cnpj := utils.GenerateRandomDoc(12, 9)
 
 	sum, err := utils.Calculator(cnpj, 5)
@@ -85,7 +87,7 @@ func Generate() (string, error) {
 
 	cnpj += fmt.Sprintf("%d", utils.GetDigit(sum))
 
-	if err := IsValid(cnpj); err != nil {
+	if err := iDoc.IsValid(cnpj); err != nil {
 		return "", err
 	}
 
