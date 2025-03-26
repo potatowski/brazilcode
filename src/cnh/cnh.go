@@ -3,26 +3,28 @@ package cnh
 import (
 	"fmt"
 
-	"github.com/potatowski/brazilcode/src"
+	"github.com/potatowski/brazilcode/src/utils"
 )
 
 var (
-	ErrCNHInvalidLength = fmt.Errorf("Invalid CNH length")
-	ErrCNHInvalid       = fmt.Errorf("Invalid CNH")
+	ErrCNHInvalidLength = fmt.Errorf("invalid CNH length")
+	ErrCNHInvalid       = fmt.Errorf("invalid CNH")
 )
+
+type CNH struct{}
 
 /*
 IsValid check if the CNH is valid
   - @param {string}
   - @return {error}
 */
-func IsValid(doc string) error {
-	doc = src.RemoveChar(doc)
+func (iDoc CNH) IsValid(doc string) error {
+	doc = utils.RemoveChar(doc)
 	if len(doc) != 11 {
 		return ErrCNHInvalidLength
 	}
 
-	dv1, dv2, err := src.CalculateCNHDVs(doc)
+	dv1, dv2, err := utils.CalculateCNHDVs(doc)
 	if err != nil {
 		return err
 	}
@@ -35,19 +37,33 @@ func IsValid(doc string) error {
 }
 
 /*
+Format is to format the CNH
+  - @param {string} doc
+  - @return {string, error}
+*/
+func (iDoc CNH) Format(doc string) (string, error) {
+	err := iDoc.IsValid(doc)
+	if err != nil {
+		return "", err
+	}
+
+	return doc, nil
+}
+
+/*
 Generate is to create a random CNH
   - @return {string}
   - @return {error}
 */
-func Generate() (string, error) {
-	cnh := src.GenerateRandomDoc(9, 10)
-	dv1, dv2, err := src.CalculateCNHDVs(cnh)
+func (iDoc CNH) Generate() (string, error) {
+	cnh := utils.GenerateRandomDoc(9, 10)
+	dv1, dv2, err := utils.CalculateCNHDVs(cnh)
 	if err != nil {
 		return "", err
 	}
 
 	cnh += fmt.Sprintf("%d%d", dv1, dv2)
-	IsValid(cnh)
+	iDoc.IsValid(cnh)
 
 	return cnh, nil
 }

@@ -4,21 +4,23 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/potatowski/brazilcode/src"
+	"github.com/potatowski/brazilcode/src/utils"
 )
 
 var (
-	ErrCNPJInvalid       = errors.New("Invalid CNPJ")
-	ErrCNPJInvalidLength = errors.New("Invalid CNPJ length")
+	ErrCNPJInvalid       = errors.New("invalid CNPJ")
+	ErrCNPJInvalidLength = errors.New("invalid CNPJ length")
 )
+
+type CNPJ struct{}
 
 /*
 IsValid check if the CNPJ is valid
   - @param {string} doc
   - @return {error}
 */
-func IsValid(doc string) error {
-	doc = src.RemoveChar(doc)
+func (iDoc CNPJ) IsValid(doc string) error {
+	doc = utils.RemoveChar(doc)
 	if len(doc) != 14 {
 		return ErrCNPJInvalidLength
 	}
@@ -28,23 +30,23 @@ func IsValid(doc string) error {
 
 	doc = doc[:12]
 	var sum int
-	sum, err := src.Calculator(doc, 5)
+	sum, err := utils.Calculator(doc, 5)
 	if err != nil {
 		return err
 	}
 
-	firstDigit := src.GetDigit(sum)
+	firstDigit := utils.GetDigit(sum)
 	if firstDigit != int(firstDigitCheck) {
 		return ErrCNPJInvalid
 	}
 	doc += fmt.Sprintf("%d", firstDigit)
 
-	sum, err = src.Calculator(doc, 6)
+	sum, err = utils.Calculator(doc, 6)
 	if err != nil {
 		return err
 	}
 
-	secondDigit := src.GetDigit(sum)
+	secondDigit := utils.GetDigit(sum)
 	if secondDigit != int(secondDigitCheck) {
 		return ErrCNPJInvalid
 	}
@@ -57,8 +59,8 @@ Format is to format the CNPJ
   - @param {string} doc
   - @return {string, error}
 */
-func Format(doc string) (string, error) {
-	if err := IsValid(doc); err != nil {
+func (iDoc CNPJ) Format(doc string) (string, error) {
+	if err := iDoc.IsValid(doc); err != nil {
 		return "", err
 	}
 	return doc[:2] + "." + doc[2:5] + "." + doc[5:8] + "/" + doc[8:12] + "-" + doc[12:], nil
@@ -68,24 +70,24 @@ func Format(doc string) (string, error) {
 Generate is to create a random CNPJ
   - @return {string}
 */
-func Generate() (string, error) {
-	cnpj := src.GenerateRandomDoc(12, 9)
+func (iDoc CNPJ) Generate() (string, error) {
+	cnpj := utils.GenerateRandomDoc(12, 9)
 
-	sum, err := src.Calculator(cnpj, 5)
+	sum, err := utils.Calculator(cnpj, 5)
 	if err != nil {
 		return "", err
 	}
 
-	cnpj += fmt.Sprintf("%d", src.GetDigit(sum))
+	cnpj += fmt.Sprintf("%d", utils.GetDigit(sum))
 
-	sum, err = src.Calculator(cnpj, 6)
+	sum, err = utils.Calculator(cnpj, 6)
 	if err != nil {
 		return "", err
 	}
 
-	cnpj += fmt.Sprintf("%d", src.GetDigit(sum))
+	cnpj += fmt.Sprintf("%d", utils.GetDigit(sum))
 
-	if err := IsValid(cnpj); err != nil {
+	if err := iDoc.IsValid(cnpj); err != nil {
 		return "", err
 	}
 

@@ -1,131 +1,72 @@
 package brazilcode
 
 import (
+	"errors"
+
 	"github.com/potatowski/brazilcode/src/cnh"
 	"github.com/potatowski/brazilcode/src/cnpj"
 	"github.com/potatowski/brazilcode/src/cpf"
+	iface "github.com/potatowski/brazilcode/src/interface"
 	"github.com/potatowski/brazilcode/src/voterRegistration"
 )
 
-var (
-	//Errors about CNPJ
-	ErrCNPJInvalid       = cnpj.ErrCNPJInvalid
-	ErrCNPJInvalidLength = cnpj.ErrCNPJInvalidLength
+var CPF = cpf.CPF{}
+var CNPJ = cnpj.CNPJ{}
+var CNH = cnh.CNH{}
+var VoterRegistration = voterRegistration.VoterRegistration{}
 
-	//Errors about CPF
-	ErrCPFInvalidLength = cpf.ErrCPFInvalidLength
-	ErrCPFInvalid       = cpf.ErrCPFInvalid
-
-	//Errors about CNH
-	ErrCNHInvalid       = cnh.ErrCNHInvalid
-	ErrCNHInvalidLength = cnh.ErrCNHInvalidLength
-
-	//Errors about Voter Registration
-	ErrVoterRegistrationInvalid       = voterRegistration.ErrVoterRegistrationInvalid
-	ErrVoterRegistrationInvalidLength = voterRegistration.ErrVoterRegistrationInvalidLength
-	ErrVoterRegistrationInvalidUF     = voterRegistration.ErrVoterRegistrationInvalidUF
-	ErrVoterRegistrationLimit         = voterRegistration.ErrVoterRegistrationLimit
-)
-
-/*
-CNPJIsValid check if the CNPJ is valid
-  - @param {string} doc - CNPJ
-  - @return {error} - error
-*/
-func CNPJIsValid(doc string) error {
-	return cnpj.IsValid(doc)
+var Documents = map[string]iface.Document{
+	"CPF":               CPF,
+	"CNPJ":              CNPJ,
+	"CNH":               CNH,
+	"VoterRegistration": VoterRegistration,
 }
 
-/*
-CNPJFormat format the an valid CNPJ
-  - @param {string} doc - CNPJ
-  - @return {string} - CNPJ formatted
-  - @return {error}	- error
-*/
-func CNPJFormat(doc string) (string, error) {
-	return cnpj.Format(doc)
+// IsValid checks if the provided document is valid based on its type.
+// It takes a document type (docType) and the document value (doc) as input.
+// If the document type exists in the Documents map, it delegates the validation
+// to the corresponding IsValid method of the document type.
+// Returns nil if the document is valid, or an error if the document type is not supported
+// or the document fails validation.
+func IsValid(docType, doc string) error {
+	if d, exists := Documents[docType]; exists {
+		return d.IsValid(doc)
+	}
+	return errors.New("document type not supported")
 }
 
-/*
-CNPJGenerate generate a valid CNPJ
-  - @return {string} - CNPJ
-  - @return {error}	- error
-*/
-func CNPJGenerate() (string, error) {
-	return cnpj.Generate()
+// Format formats a given document string based on its type.
+// It takes two parameters: docType, which specifies the type of the document
+// (e.g., CPF, CNPJ), and doc, which is the document string to be formatted.
+// If the document type is supported, it returns the formatted document string.
+// Otherwise, it returns an error indicating that the document type is not supported.
+//
+// Parameters:
+//   - docType: A string representing the type of the document.
+//   - doc: A string representing the document to be formatted.
+//
+// Returns:
+//   - A formatted document string if the document type is supported.
+//   - An error if the document type is not supported.
+func Format(docType, doc string) (string, error) {
+	if d, exists := Documents[docType]; exists {
+		return d.Format(doc)
+	}
+	return "", errors.New("document type not supported")
 }
 
-/*
-CPFIsValid check if the CPF is valid
-  - @param {string} doc - CPF
-  - @return {error} - error
-*/
-func CPFIsValid(doc string) error {
-	return cpf.IsValid(doc)
-}
-
-/*
-CPFFormat format the a valid CPF
-  - @param {string} doc - CPF
-  - @return {string} - CPF formatted
-  - @return {error} - error
-*/
-func CPFFormat(doc string) (string, error) {
-	return cpf.Format(doc)
-}
-
-/*
-CPFGenerate generate a valid CPF
-  - @return {string} - CPF
-  - @return {error} - error
-*/
-func CPFGenerate() (string, error) {
-	return cpf.Generate()
-}
-
-/*
-CNHIsValid check if the CNH is valid
-  - @param {string} doc
-  - @return {error} - error
-*/
-func CNHIsValid(doc string) error {
-	return cnh.IsValid(doc)
-}
-
-/*
-CNHGenerate generate a valid CNH
-  - @return {string} - CNH
-  - @return {error} - error
-*/
-func CNHGenerate() (string, error) {
-	return cnh.Generate()
-}
-
-/*
-VoterRegistrationIsValid check if the Voter Registration is valid
-  - @param {string} doc - Voter Registration
-  - @return {error} - error
-*/
-func VoterRegistrationIsValid(doc string) error {
-	return voterRegistration.IsValid(doc)
-}
-
-/*
-VoterRegistrationFormat format the a valid Voter Registration
-  - @param {string} doc - Voter Registration
-  - @return {string} - Voter Registration formatted
-  - @return {error} - error
-*/
-func VoterRegistrationFormat(doc string) (string, error) {
-	return voterRegistration.Format(doc)
-}
-
-/*
-VoterRegistrationGenerate generate a valid Voter Registration
-  - @param {string} uf - UF is the state of Brazil or ZZ for foreigners
-  - @return {string}
-  - @return {error}
-*/
-func VoterRegistrationGenerate(uf string) (string, error) {
-	return voterRegistration.Generate(uf)
+// Generate generates a document based on the provided document type.
+// It returns the generated document as a string and an error if the document type is not supported.
+//
+// Parameters:
+//   - docType: A string representing the type of document to generate.
+//
+// Returns:
+//   - string: The generated document.
+//   - error: An error if the document type is not supported.
+func Generate(docType string) (string, error) {
+	if d, exists := Documents[docType]; exists {
+		return d.Generate()
+	}
+	return "", errors.New("document type not supported")
 }

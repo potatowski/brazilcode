@@ -2,7 +2,11 @@ package voterRegistration
 
 import (
 	"testing"
+
+	iface "github.com/potatowski/brazilcode/src/interface"
 )
+
+var doc iface.Document = VoterRegistration{}
 
 func TestIsValid(t *testing.T) {
 	tests := []struct {
@@ -39,7 +43,7 @@ func TestIsValid(t *testing.T) {
 
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
-			err := IsValid(test.voterRegistration)
+			err := doc.IsValid(test.voterRegistration)
 
 			if err != test.expectedError {
 				t.Errorf("Expected error %v but got %v", test.expectedError, err)
@@ -89,7 +93,7 @@ func TestFormat(t *testing.T) {
 
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
-			result, err := Format(test.voterRegistration)
+			result, err := doc.Format(test.voterRegistration)
 			if err != test.expectedError {
 				t.Errorf("Expected error %v but got %v", test.expectedError, err)
 			}
@@ -102,33 +106,7 @@ func TestFormat(t *testing.T) {
 }
 
 func TestGenerate(t *testing.T) {
-	// Test case 1: valid UF
-	uf := "MG"
-	voter, err := Generate(uf)
-	if err != nil {
-		t.Errorf("unexpected error: %v", err)
-	}
-
-	if len(voter) != 12 {
-		t.Errorf("expected length 12, but got length %d", len(voter))
-	}
-
-	code := ufToCode[uf]
-
-	if code != voter[8:10] {
-		t.Errorf("expected %s uf code, but got %s", uf, voter[8:10])
-	}
-
-	// Test case 2: invalid UF
-	uf = "XX"
-	_, err = Generate(uf)
-	if err == nil {
-		t.Errorf("expected error, but got nil")
-	}
-
-	// Test case 3: empty UF
-	uf = ""
-	voter, err = Generate(uf)
+	_, err := doc.Generate()
 	if err != nil {
 		t.Errorf("unexpected error: %v", err)
 	}
