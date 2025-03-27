@@ -10,11 +10,29 @@ import (
 	"github.com/potatowski/brazilcode/v2/src/voterRegistration"
 )
 
+// CPF represents a CPF (Cadastro de Pessoas Físicas), which is the Brazilian
+// individual taxpayer registry identification. This variable is initialized
+// as an instance of the cpf.CPF type.
 var CPF = cpf.CPF{}
+
+// CNPJ represents an instance of the CNPJ structure from the cnpj package.
+// It is used to handle operations related to the Brazilian CNPJ (Cadastro Nacional
+// da Pessoa Jurídica), which is a unique identifier for legal entities in Brazil.
 var CNPJ = cnpj.CNPJ{}
+
+// CNH represents an instance of a Brazilian driver's license (Carteira Nacional de Habilitação).
+// It is initialized as an empty struct from the cnh package.
 var CNH = cnh.CNH{}
+
+// VoterRegistration is an instance of the VoterRegistration struct from the
+// voterRegistration package. It is used to manage and represent voter
+// registration information.
 var VoterRegistration = voterRegistration.VoterRegistration{}
 
+// Documents is a map that associates document types with their corresponding
+// iface.Document implementations. The keys represent the document type names
+// (e.g., "CPF", "CNPJ", "CNH", "VoterRegistration"), and the values are the
+// respective document handlers or validators.
 var Documents = map[string]iface.Document{
 	"CPF":               CPF,
 	"CNPJ":              CNPJ,
