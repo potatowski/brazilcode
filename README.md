@@ -7,6 +7,7 @@ The `brazilcode` package provides functionality to validate, generate, and forma
 - **CNPJ**: Cadastro Nacional de Pessoas Jurídicas (National Register of Legal Entities)
 - **CNH**: Carteira Nacional de Habilitação (National Driver's License)
 - **Voter Registration (Título de Eleitor)**: Brazilian Electoral Registration Number
+- **RENAVAM**: Brazilian National Registry of Motor Vehicle
 
 ## Installation
 To install the `brazilcode` package, run the following command in your shell:
