@@ -11,7 +11,7 @@ The `brazilcode` package provides functionality to validate, generate, and forma
 ## Installation
 To install the `brazilcode` package, run the following command in your shell:
 ```shell
-$ go get github.com/potatowski/brazilcode
+$ go get github.com/potatowski/brazilcode/v2
 ```
 
 ## Usage
@@ -23,7 +23,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/potatowski/brazilcode"
+	"github.com/potatowski/brazilcode/v2"
 )
 
 func main() {
