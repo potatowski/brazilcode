@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.1.0] - 2025-03-31
+
+### Added
+- Implement RENAVAM validation and generation functions.
+- Add RENAVAM instance for vehicle registration management.
+- Add unit tests for RENAVAM validation, formatting, and generation.
+- Add unit tests for Document interface using a mock implementation.
+- Add documentation for CPF, CNPJ, CNH, and VoterRegistration.
+
+### Changed
+
+- Update README to reflect module path change to v2.
+- Update README to include RENAVAM in the list of features.
+- Update CHANGELOG with new RENAVAM features and unit tests.
+
 ## [2.0.0] - 2025-03-26
 
 ### Added
