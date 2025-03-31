@@ -7,6 +7,7 @@ import (
 	"github.com/potatowski/brazilcode/v2/src/cnpj"
 	"github.com/potatowski/brazilcode/v2/src/cpf"
 	iface "github.com/potatowski/brazilcode/v2/src/interface"
+	"github.com/potatowski/brazilcode/v2/src/renavam"
 	"github.com/potatowski/brazilcode/v2/src/voterRegistration"
 )
 
@@ -29,6 +30,12 @@ var CNH = cnh.CNH{}
 // registration information.
 var VoterRegistration = voterRegistration.VoterRegistration{}
 
+// RENAVAM is an instance of the renavam.RENAVAM struct, which represents
+// the Brazilian National Registry of Motor Vehicles (Registro Nacional de
+// Veículos Automotores). It is used to manage and validate vehicle
+// registration information in Brazil.
+var RENAVAM = renavam.RENAVAM{}
+
 // Documents is a map that associates document types with their corresponding
 // iface.Document implementations. The keys represent the document type names
 // (e.g., "CPF", "CNPJ", "CNH", "VoterRegistration"), and the values are the
@@ -38,6 +45,7 @@ var Documents = map[string]iface.Document{
 	"CNPJ":              CNPJ,
 	"CNH":               CNH,
 	"VoterRegistration": VoterRegistration,
+	"RENAVAM":           RENAVAM,
 }
 
 // IsValid checks if the provided document is valid based on its type.
