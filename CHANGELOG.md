@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- RENAVAM instance for vehicle registration management.
+- Unit tests for RENAVAM validation, formatting, and generation.
+- Functions for RENAVAM validation and generation.
+
 ## [2.0.0] - 2025-03-26
 
 ### Added
