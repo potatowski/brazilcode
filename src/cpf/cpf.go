@@ -66,7 +66,7 @@ func (iDoc CPF) Format(doc string) (string, error) {
 Generate is to create a random CPF
   - @return {string, error}
 */
-func (iDoc CPF) Generate() (string, error) {
+func (iDoc CPF) Generate(params map[string]string) (string, error) {
 	cpf := utils.GenerateRandomDoc(9, 9)
 
 	sum, err := utils.Calculator(cpf, 10)

@@ -77,7 +77,7 @@ func TestFormat(t *testing.T) {
 }
 
 func TestGenerate(t *testing.T) {
-	renavam, err := doc.Generate()
+	renavam, err := doc.Generate(nil)
 	if err != nil {
 		t.Errorf("[TEST-RENAVAM-generate] unexpected error: %v\n RENAVAM generated: %s", err, renavam)
 	}

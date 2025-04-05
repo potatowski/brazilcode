@@ -13,11 +13,11 @@ Methods:
     Formats the given document string into a standardized format and returns
     the formatted string along with any potential error.
 
-  - Generate() (string, error):
+  - Generate(params []string) (string, error):
     Generates a new document string and returns it along with any potential error.
 */
 type Document interface {
 	IsValid(doc string) error
 	Format(doc string) (string, error)
-	Generate() (string, error)
+	Generate(params map[string]string) (string, error)
 }

@@ -106,9 +106,46 @@ func TestFormat(t *testing.T) {
 }
 
 func TestGenerate(t *testing.T) {
-	_, err := doc.Generate()
-	if err != nil {
-		t.Errorf("unexpected error: %v", err)
+	testCases := []struct {
+		name          string
+		params        map[string]string
+		expectedError error
+	}{
+		{
+			name:          "TG-01 - Valid UF",
+			params:        map[string]string{"uf": "MG"},
+			expectedError: nil,
+		},
+		{
+			name:          "TG-02 - Params nil",
+			params:        nil,
+			expectedError: nil,
+		},
+		{
+			name:          "TG-03 - Invalid UF",
+			params:        map[string]string{"uf": "XX"},
+			expectedError: ErrVoterRegistrationInvalidUF,
+		},
+		{
+			name:          "TG-04 - Empty UF",
+			params:        map[string]string{"uf": ""},
+			expectedError: nil,
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			result, err := doc.Generate(tc.params)
+			if err != nil && err != tc.expectedError {
+				t.Errorf("Expected error %v but got %v", tc.expectedError, err)
+			}
+
+			if result != "" && err == nil {
+				if len(result) != 12 {
+					t.Errorf("Expected length of result to be 12 but got %d %s", len(result), result)
+				}
+			}
+		})
 	}
 }
 

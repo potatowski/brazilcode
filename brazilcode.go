@@ -90,9 +90,9 @@ func Format(docType, doc string) (string, error) {
 // Returns:
 //   - string: The generated document.
 //   - error: An error if the document type is not supported.
-func Generate(docType string) (string, error) {
+func Generate(docType string, params map[string]string) (string, error) {
 	if d, exists := Documents[docType]; exists {
-		return d.Generate()
+		return d.Generate(params)
 	}
 	return "", errors.New("document type not supported")
 }

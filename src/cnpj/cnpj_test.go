@@ -106,7 +106,7 @@ func TestFormat(t *testing.T) {
 }
 
 func TestGenerate(t *testing.T) {
-	cnpj, err := doc.Generate()
+	cnpj, err := doc.Generate(nil)
 	if err != nil {
 		t.Errorf("unexpected error: %v", err)
 	}

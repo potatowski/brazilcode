@@ -52,7 +52,7 @@ func (iDoc RENAVAM) IsValid(doc string) error {
 // Returns:
 //
 //	doc (string): The RENAVAM document.
-func (iDoc RENAVAM) Generate() (string, error) {
+func (iDoc RENAVAM) Generate(params map[string]string) (string, error) {
 	doc := utils.GenerateRandomDoc(10, 9)
 	var sum int
 	for i := 0; i < len(doc); i++ {

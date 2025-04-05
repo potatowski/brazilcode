@@ -9,7 +9,7 @@ import (
 type MockDocument struct {
 	IsValidFunc  func(doc string) error
 	FormatFunc   func(doc string) (string, error)
-	GenerateFunc func() (string, error)
+	GenerateFunc func(params map[string]string) (string, error)
 }
 
 func (m *MockDocument) IsValid(doc string) error {
@@ -20,8 +20,8 @@ func (m *MockDocument) Format(doc string) (string, error) {
 	return m.FormatFunc(doc)
 }
 
-func (m *MockDocument) Generate() (string, error) {
-	return m.GenerateFunc()
+func (m *MockDocument) Generate(params map[string]string) (string, error) {
+	return m.GenerateFunc(params)
 }
 
 func TestIsValid(t *testing.T) {
@@ -88,12 +88,12 @@ func TestFormat(t *testing.T) {
 
 func TestGenerate(t *testing.T) {
 	mock := &MockDocument{
-		GenerateFunc: func() (string, error) {
+		GenerateFunc: func(params map[string]string) (string, error) {
 			return "generated-doc", nil
 		},
 	}
 
-	got, err := mock.Generate()
+	got, err := mock.Generate(nil)
 	if err != nil {
 		t.Errorf("Generate() error = %v, wantErr false", err)
 	}

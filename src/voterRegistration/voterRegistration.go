@@ -140,7 +140,7 @@ Generate is to create a random Voter Registration
   - @param {string} uf
   - @return {string, error}
 */
-func (iDoc VoterRegistration) Generate() (string, error) {
+func (iDoc VoterRegistration) Generate(params map[string]string) (string, error) {
 	voter := utils.GenerateRandomDoc(8, 9)
 	sum, err := calc(voter, 2, 9)
 	if err != nil {
@@ -148,7 +148,10 @@ func (iDoc VoterRegistration) Generate() (string, error) {
 	}
 
 	dv1 := utils.GetDigitMoreThen(sum, false)
-	uf := getRandomUF()
+	uf := params["uf"]
+	if uf == "" {
+		uf = getRandomUF()
+	}
 
 	ufRegister := ufToCode[uf]
 	if ufRegister == "" {

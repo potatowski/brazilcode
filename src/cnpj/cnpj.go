@@ -70,7 +70,7 @@ func (iDoc CNPJ) Format(doc string) (string, error) {
 Generate is to create a random CNPJ
   - @return {string}
 */
-func (iDoc CNPJ) Generate() (string, error) {
+func (iDoc CNPJ) Generate(params map[string]string) (string, error) {
 	cnpj := utils.GenerateRandomDoc(12, 9)
 
 	sum, err := utils.Calculator(cnpj, 5)

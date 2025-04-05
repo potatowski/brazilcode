@@ -62,7 +62,7 @@ func TestGenerate(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.docType, func(t *testing.T) {
-			_, err := brazilcode.Generate(tt.docType)
+			_, err := brazilcode.Generate(tt.docType, nil)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("Generate() error = %v, wantErr %v", err, tt.wantErr)
 			}

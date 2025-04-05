@@ -55,7 +55,7 @@ Generate is to create a random CNH
   - @return {string}
   - @return {error}
 */
-func (iDoc CNH) Generate() (string, error) {
+func (iDoc CNH) Generate(params map[string]string) (string, error) {
 	cnh := utils.GenerateRandomDoc(9, 10)
 	dv1, dv2, err := utils.CalculateCNHDVs(cnh)
 	if err != nil {

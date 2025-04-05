@@ -83,7 +83,7 @@ func TestFormat(t *testing.T) {
 }
 
 func TestGenerate(t *testing.T) {
-	cnh, err := doc.Generate()
+	cnh, err := doc.Generate(nil)
 	if err != nil {
 		t.Errorf("[TEST-CNH-generate] unexpected error: %v\n CNH generated: %s", err, cnh)
 	}
