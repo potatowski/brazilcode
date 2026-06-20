@@ -1,4 +1,3 @@
-module github.com/potatowski/brazilcode/v2
-
+module github.com/potatowski/brazilcode/v3
 
 go 1.20
