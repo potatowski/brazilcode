@@ -7,6 +7,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.1.0] - 2026-06-20
+
+### Added
+- Alphanumeric CNPJ support (in effect from July 2026): the 12-character base may
+  now contain the letters `A-Z` in addition to digits, followed by 2 numeric
+  check digits. Each character contributes its value as `ASCII − '0'` (digits map
+  to `0-9`, letters to `17-42`) using the same mod-11 algorithm as numeric CNPJ.
+- `CNPJ.GenerateAlphanumeric()` generates a random valid alphanumeric CNPJ.
+- `digit.RemoveCNPJFormatting` strips CNPJ formatting (dots, dashes, slashes,
+  whitespace) and upper-cases the result while preserving letters.
+- `digit.GenerateAlphanumericChars` generates random alphanumeric characters
+  (`0-9`, `A-Z`).
+
+### Changed
+- `CNPJ.IsValid` and `CNPJ.Format` now accept both numeric (legacy) and
+  alphanumeric CNPJs. Input is sanitized with `RemoveCNPJFormatting` (which keeps
+  letters) instead of `RemoveNonDigits`. As a result, a 14-character input that
+  contains letters and matches the alphanumeric shape but fails the checksum now
+  returns `ErrCNPJInvalid` rather than `ErrCNPJInvalidLength`.
+
 ## [3.0.0] - 2026-04-13
 
 ### Added

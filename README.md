@@ -117,6 +117,36 @@ Available sub-packages:
 | `renavam` | `github.com/potatowski/brazilcode/v3/renavam` | RENAVAM |
 | `voter` | `github.com/potatowski/brazilcode/v3/voter` | Título de Eleitor |
 
+## Alphanumeric CNPJ
+
+From July 2026 the CNPJ becomes alphanumeric: the 12-character base may contain
+the letters `A-Z` in addition to digits, while the last 2 positions remain
+numeric check digits. The check-digit algorithm is unchanged — each character
+contributes its value as `ASCII − '0'` (digits map to `0-9`, letters to `17-42`)
+under the same mod-11 rule.
+
+`IsValid` and `Format` accept both the legacy numeric format and the new
+alphanumeric format transparently:
+
+```go
+import "github.com/potatowski/brazilcode/v3/cnpj"
+
+c := cnpj.CNPJ{}
+
+// Legacy numeric CNPJ
+_ = c.IsValid("11.222.333/0001-81") // nil
+
+// Alphanumeric CNPJ (case-insensitive input is normalized to upper-case)
+_ = c.IsValid("12.ABC.345/01DE-35")            // nil
+formatted, _ := c.Format("12ABC34501DE35")     // "12.ABC.345/01DE-35"
+
+// Generate a random alphanumeric CNPJ
+doc, _ := c.GenerateAlphanumeric()             // e.g. "AB12CD34EF5691"
+```
+
+`Generate()` continues to produce numeric CNPJs; use `GenerateAlphanumeric()` for
+the new format.
+
 ## Migrating from v2
 
 ### Breaking Changes
