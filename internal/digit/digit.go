@@ -42,9 +42,23 @@ func ApplyOptions(opts ...Option) GenerateConfig {
 // nonDigitRegex is pre-compiled once for reuse.
 var nonDigitRegex = regexp.MustCompile(`[^0-9]+`)
 
+// cnpjFormattingRegex matches CNPJ formatting characters (dots, dashes,
+// slashes and whitespace). Pre-compiled once for reuse.
+var cnpjFormattingRegex = regexp.MustCompile(`[.\-/\s]+`)
+
+// alphanumericCharset holds the characters allowed in an alphanumeric CNPJ base.
+const alphanumericCharset = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+
 // RemoveNonDigits strips all non-digit characters from a string.
 func RemoveNonDigits(s string) string {
 	return nonDigitRegex.ReplaceAllString(s, "")
+}
+
+// RemoveCNPJFormatting strips CNPJ formatting characters (dots, dashes,
+// slashes and whitespace) and upper-cases the result. Unlike RemoveNonDigits,
+// it preserves letters so alphanumeric CNPJs survive sanitization.
+func RemoveCNPJFormatting(s string) string {
+	return strings.ToUpper(cnpjFormattingRegex.ReplaceAllString(s, ""))
 }
 
 // GenerateDigits generates a string of n random digits (0-9).
@@ -53,6 +67,17 @@ func GenerateDigits(n int) string {
 	b.Grow(n)
 	for i := 0; i < n; i++ {
 		b.WriteByte('0' + byte(rand.Intn(10)))
+	}
+	return b.String()
+}
+
+// GenerateAlphanumericChars generates a string of n random alphanumeric
+// characters (0-9, A-Z) for use as an alphanumeric CNPJ base.
+func GenerateAlphanumericChars(n int) string {
+	var b strings.Builder
+	b.Grow(n)
+	for i := 0; i < n; i++ {
+		b.WriteByte(alphanumericCharset[rand.Intn(len(alphanumericCharset))])
 	}
 	return b.String()
 }
@@ -88,6 +113,11 @@ func AllDigitsEqual(s string) bool {
 // Calculator returns the weighted sum of digits for CPF/CNPJ validation.
 // The weight starts at 'first' and decrements by 1 for each digit.
 // For documents longer than 9 digits, when the weight reaches 1 it wraps to 9.
+//
+// Each character contributes its value as (ASCII code - '0'). For digits this
+// yields 0-9; for the upper-case letters A-Z of an alphanumeric CNPJ this yields
+// 17-42, exactly as required by the Receita Federal check-digit rule. Callers
+// are responsible for ensuring the input only contains valid characters.
 func Calculator(doc string, first int) (int, error) {
 	if first <= 0 {
 		return 0, errors.New("first must be greater than 0")

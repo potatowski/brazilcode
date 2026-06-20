@@ -26,6 +26,48 @@ func TestRemoveNonDigits(t *testing.T) {
 	}
 }
 
+func TestRemoveCNPJFormatting(t *testing.T) {
+	tests := []struct {
+		name     string
+		input    string
+		expected string
+	}{
+		{"formatted alphanumeric", "12.ABC.345/01DE-35", "12ABC34501DE35"},
+		{"lowercase normalized", "12abc34501de35", "12ABC34501DE35"},
+		{"formatted numeric", "11.222.333/0001-81", "11222333000181"},
+		{"with spaces", " 12 ABC 345 01DE 35 ", "12ABC34501DE35"},
+		{"only letters", "abc", "ABC"},
+		{"empty string", "", ""},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			result := RemoveCNPJFormatting(tt.input)
+			if result != tt.expected {
+				t.Errorf("RemoveCNPJFormatting(%q) = %q, want %q", tt.input, result, tt.expected)
+			}
+		})
+	}
+}
+
+func TestGenerateAlphanumericChars(t *testing.T) {
+	lengths := []int{1, 5, 12}
+	for _, length := range lengths {
+		doc := GenerateAlphanumericChars(length)
+
+		if len(doc) != length {
+			t.Errorf("GenerateAlphanumericChars(%d) length = %d, want %d", length, len(doc), length)
+		}
+
+		for _, c := range doc {
+			if (c < '0' || c > '9') && (c < 'A' || c > 'Z') {
+				t.Errorf("GenerateAlphanumericChars(%d) = %q, contains invalid char %q", length, doc, c)
+				break
+			}
+		}
+	}
+}
+
 func TestGenerateDigits(t *testing.T) {
 	lengths := []int{1, 5, 9, 11, 14}
 	for _, length := range lengths {
@@ -49,11 +91,11 @@ func TestCheckDigitMod11(t *testing.T) {
 		sum      int
 		expected int
 	}{
-		{287, 0},  // 287 % 11 = 1 (< 2 → 0)
-		{237, 5},  // 237 % 11 = 6 → 11 - 6 = 5
-		{0, 0},    // 0 % 11 = 0 (< 2 → 0)
-		{11, 0},   // 11 % 11 = 0 (< 2 → 0)
-		{13, 9},   // 13 % 11 = 2 → 11 - 2 = 9
+		{287, 0}, // 287 % 11 = 1 (< 2 → 0)
+		{237, 5}, // 237 % 11 = 6 → 11 - 6 = 5
+		{0, 0},   // 0 % 11 = 0 (< 2 → 0)
+		{11, 0},  // 11 % 11 = 0 (< 2 → 0)
+		{13, 9},  // 13 % 11 = 2 → 11 - 2 = 9
 	}
 
 	for _, tt := range tests {
