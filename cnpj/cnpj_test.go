@@ -14,11 +14,17 @@ func TestIsValid(t *testing.T) {
 		{"invalid check digits", "11.222.333/0001-82", ErrCNPJInvalid},
 		{"too short", "11.222.333/0001-8", ErrCNPJInvalidLength},
 		{"too long", "11.222.333/0001-810", ErrCNPJInvalidLength},
-		{"invalid characters", "11.222.333/00a1-81", ErrCNPJInvalidLength},
 		{"wrong first digit", "11.222.333/0001-01", ErrCNPJInvalid},
 		{"all zeros", "00000000000000", ErrCNPJInvalid},
 		{"all ones", "11111111111111", ErrCNPJInvalid},
 		{"all nines", "99999999999999", ErrCNPJInvalid},
+		{"valid alphanumeric formatted", "12.ABC.345/01DE-35", nil},
+		{"valid alphanumeric raw", "12ABC34501DE35", nil},
+		{"valid alphanumeric lowercase normalized", "12abc34501de35", nil},
+		{"alphanumeric wrong first check digit", "12ABC34501DE45", ErrCNPJInvalid},
+		{"alphanumeric wrong second check digit", "12ABC34501DE34", ErrCNPJInvalid},
+		{"letters in check digit positions", "12ABC34501DEAB", ErrCNPJInvalid},
+		{"lowercase letters bad check digits", "11.222.333/00a1-81", ErrCNPJInvalid},
 	}
 
 	for _, tt := range tests {
@@ -40,6 +46,8 @@ func TestFormat(t *testing.T) {
 		expectedErr error
 	}{
 		{"valid CNPJ", "11222333000181", "11.222.333/0001-81", nil},
+		{"valid alphanumeric", "12ABC34501DE35", "12.ABC.345/01DE-35", nil},
+		{"valid alphanumeric lowercase", "12abc34501de35", "12.ABC.345/01DE-35", nil},
 		{"invalid length", "112223330001", "", ErrCNPJInvalidLength},
 		{"wrong first digit", "11222333000111", "", ErrCNPJInvalid},
 		{"wrong second digit", "11222333000182", "", ErrCNPJInvalid},
@@ -72,6 +80,24 @@ func TestGenerate(t *testing.T) {
 
 		if err := c.IsValid(cnpj); err != nil {
 			t.Errorf("Generate() produced invalid CNPJ %q: %v", cnpj, err)
+		}
+	}
+}
+
+func TestGenerateAlphanumeric(t *testing.T) {
+	c := CNPJ{}
+	for i := 0; i < 100; i++ {
+		cnpj, err := c.GenerateAlphanumeric()
+		if err != nil {
+			t.Fatalf("GenerateAlphanumeric() error = %v", err)
+		}
+
+		if len(cnpj) != 14 {
+			t.Errorf("GenerateAlphanumeric() length = %d, want 14", len(cnpj))
+		}
+
+		if err := c.IsValid(cnpj); err != nil {
+			t.Errorf("GenerateAlphanumeric() produced invalid CNPJ %q: %v", cnpj, err)
 		}
 	}
 }
