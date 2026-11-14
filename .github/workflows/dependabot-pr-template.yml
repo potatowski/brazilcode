@@ -1,0 +1,175 @@
+name: dependabot-pr-template
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize]
+
+permissions: {}
+
+jobs:
+  template:
+    if: github.event.pull_request.user.login == 'dependabot[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - name: Fetch Dependabot metadata
+        id: metadata
+        uses: dependabot/fetch-metadata@v3
+
+      - name: Rewrite the pull request body with the repository template
+        uses: actions/github-script@v9
+        env:
+          DEPENDENCIES: ${{ steps.metadata.outputs.updated-dependencies-json }}
+          UPDATE_TYPE: ${{ steps.metadata.outputs.update-type }}
+          ECOSYSTEM: ${{ steps.metadata.outputs.package-ecosystem }}
+          DIRECTORY: ${{ steps.metadata.outputs.directory }}
+          GROUP: ${{ steps.metadata.outputs.dependency-group }}
+        with:
+          script: |
+            const marker = '<!-- dependabot-pr-template -->';
+            const start = '<!-- dependabot-original:start -->';
+            const end = '<!-- dependabot-original:end -->';
+            const legacyStart = '<summary>Dependabot details (release notes, commits and commands)</summary>';
+            const { data: pr } = await github.rest.pulls.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.payload.pull_request.number,
+            });
+            const current = pr.body || '';
+            let original = current;
+            if (current.includes(marker)) {
+              if (current.includes(start) && current.includes(end)) {
+                original = current.slice(current.indexOf(start) + start.length, current.lastIndexOf(end)).trim();
+              } else if (current.includes(legacyStart)) {
+                original = current.slice(current.indexOf(legacyStart) + legacyStart.length).replace(/\s*<\/details>\s*$/, '').trim();
+              } else {
+                core.info('Body uses the template but the original text was not found; leaving it untouched.');
+                return;
+              }
+            }
+
+            const deps = JSON.parse(process.env.DEPENDENCIES || '[]');
+            const ecosystem = process.env.ECOSYSTEM || '';
+            const titleDir = (pr.title.match(/\bin (\/\S*)/) || [])[1];
+            const directory = titleDir || (process.env.DIRECTORY || '/').replace(new RegExp(`/${pr.base.ref}$`), '') || '/';
+            const updateType = (process.env.UPDATE_TYPE || '').replace('version-update:semver-', '') || 'unknown';
+            const group = process.env.GROUP;
+            const shipped = !['github_actions', 'github-actions'].includes(ecosystem);
+            const label = {
+              go_modules: 'Go module', gomod: 'Go module',
+              docker: 'Docker image', docker_compose: 'Compose image', 'docker-compose': 'Compose image',
+              github_actions: 'GitHub Action', 'github-actions': 'GitHub Action',
+            }[ecosystem] || ecosystem;
+
+            const bump = (d) => `\`${d.dependencyName}\` from \`${d.prevVersion}\` to \`${d.newVersion}\``;
+            const bullets = deps.map((d) => `- Bump ${bump(d)}`).join('\n') || '-';
+            const cves = [...new Set(original.match(/\b(CVE-\d{4}-\d{4,}|GHSA(?:-[a-z0-9]{4}){3})\b/gi) || [])].map((id) => id.toUpperCase());
+
+            const summary = [
+              `Dependabot update of ${deps.length} ${label} ${deps.length === 1 ? 'dependency' : 'dependencies'} in \`${directory}\`${group ? ` (group \`${group}\`)` : ''}. Highest update type: **${updateType}**.`,
+              '',
+              bullets,
+              cves.length ? `\nThe upstream release notes mention security fixes: ${cves.join(', ')}.` : '',
+            ].join('\n');
+
+            const changed = shipped ? bullets : '-';
+            const security = shipped && cves.length
+              ? `- Update dependencies with upstream fixes for ${cves.join(', ')}`
+              : '-';
+
+            const body = `${marker}
+            # 🚀 Pull Request Template
+
+            ## 📝 Summary
+
+            ${summary}
+
+            ## 🔗 Context & Impact
+
+            * **Related Issue:** N/A
+            * **API Changes:** No
+            * **Breaking Change:** No${updateType === 'major' ? ' (major version of a dependency; check the release notes below)' : ''}
+            * **Dependencies:** ${deps.map(bump).join(', ') || 'N/A'}
+
+            ## 🛠️ Implementation Details
+
+            Automated update opened by Dependabot. ${shipped ? 'It changes what is built and shipped, so it is listed in the release changelog.' : 'It only affects CI, so it is not listed in the release changelog.'}
+
+            ### Database & Infrastructure
+
+            * [ ] **Migrations:** N/A
+            * [ ] **Indexes:** N/A
+            * [ ] **Env Vars:** N/A
+
+            ### Logic & Security
+
+            * [ ] **Error Handling:** N/A
+            * [ ] **Auth/Authz:** N/A
+            * [ ] **Validation:** N/A
+
+            ---
+
+            ## 🧪 Testing & Validation
+
+            ### Automated Tests
+
+            * [ ] **Unit Tests:** N/A (covered by the existing CI checks on this pull request)
+            * [ ] **Integration Tests:** N/A (MongoDB integration tests run in CI)
+            * **Coverage:** not measured
+
+            ### Manual Verification (API Request/Response)
+
+            N/A. Rely on the required CI checks and the release notes below.
+
+            ---
+
+            ## 📈 Performance & Monitoring
+
+            * [ ] **Logging:** N/A
+            * [ ] **Scaling:** N/A
+            * [ ] **Alerting:** N/A
+            ---
+
+            ## 📋 Changelog Entry
+
+            ### Added
+            -
+            ### Changed
+            ${changed}
+            ### Deprecated
+            -
+            ### Removed
+            -
+            ### Fixed
+            -
+            ### Security
+            ${security}
+
+            ---
+
+            <details>
+            <summary>Dependabot details (release notes, commits and commands)</summary>
+
+            ${start}
+
+            ${original}
+
+            ${end}
+
+            </details>
+            `;
+
+            if (body === current) {
+              core.info('Body already up to date.');
+              return;
+            }
+            await github.rest.pulls.update({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: pr.number,
+              body,
+            });
+            core.info('Body rewritten with the repository template.');
