@@ -4,6 +4,11 @@ import (
 	"testing"
 
 	"github.com/potatowski/brazilcode/v3"
+	"github.com/potatowski/brazilcode/v3/cnh"
+	"github.com/potatowski/brazilcode/v3/cnpj"
+	"github.com/potatowski/brazilcode/v3/cpf"
+	"github.com/potatowski/brazilcode/v3/renavam"
+	"github.com/potatowski/brazilcode/v3/voter"
 )
 
 func TestFacadeIsValid(t *testing.T) {
@@ -112,12 +117,12 @@ func TestDocTypeNotSupported(t *testing.T) {
 }
 
 func TestDocumentInterface(t *testing.T) {
-	// Verify all exported variables satisfy the Document interface at compile time
-	var _ brazilcode.Document = brazilcode.CPF
-	var _ brazilcode.Document = brazilcode.CNPJ
-	var _ brazilcode.Document = brazilcode.CNH
-	var _ brazilcode.Document = brazilcode.RENAVAM
-	var _ brazilcode.Document = brazilcode.VoterRegistration
+	// Verify every concrete document type satisfies the Document interface at compile time
+	var _ brazilcode.Document = cpf.CPF{}
+	var _ brazilcode.Document = cnpj.CNPJ{}
+	var _ brazilcode.Document = cnh.CNH{}
+	var _ brazilcode.Document = renavam.RENAVAM{}
+	var _ brazilcode.Document = voter.VoterRegistration{}
 }
 
 func TestDirectDocumentUsage(t *testing.T) {
