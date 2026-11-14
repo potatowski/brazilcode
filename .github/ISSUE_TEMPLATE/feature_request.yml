@@ -1,0 +1,32 @@
+name: Feature request
+description: Suggest a new document type or an improvement
+title: "feat: "
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem does this solve?
+      description: Describe what you need to validate, generate or format.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed API
+      description: Function names, signatures or an example of how you would call it.
+      render: go
+    validations:
+      required: true
+  - type: textarea
+    id: reference
+    attributes:
+      label: Official reference
+      description: For new documents or rule changes, link the official specification of the check digit algorithm.
+  - type: checkboxes
+    id: compatibility
+    attributes:
+      label: Compatibility
+      options:
+        - label: I checked whether this changes existing behaviour (a breaking change needs a new major version)
+          required: true
