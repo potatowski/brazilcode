@@ -1,0 +1,62 @@
+name: Bug report
+description: A function returns a wrong result, an unexpected error or panics
+title: "bug: "
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting a bug. Never paste real personal document numbers here; use generated ones (for example `brazilcode.CPF.Generate()`). For security problems use private vulnerability reporting instead (see SECURITY.md).
+  - type: dropdown
+    id: document
+    attributes:
+      label: Document type
+      options:
+        - CPF
+        - CNPJ (numeric)
+        - CNPJ (alphanumeric)
+        - CNH
+        - RENAVAM
+        - Título de Eleitor (VoterRegistration)
+        - Facade (brazilcode.IsValid / Generate / Format)
+        - Other
+    validations:
+      required: true
+  - type: dropdown
+    id: function
+    attributes:
+      label: Function
+      options:
+        - IsValid
+        - Generate
+        - Format
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Code to reproduce
+      description: A minimal program or test, with a generated (not real) document number.
+      render: go
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What did you expect, and what happened?
+      description: Include the returned value or error.
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: brazilcode version
+      description: From go.mod, for example v3.1.0
+    validations:
+      required: true
+  - type: input
+    id: go-version
+    attributes:
+      label: Go version
+      description: Output of `go version`
