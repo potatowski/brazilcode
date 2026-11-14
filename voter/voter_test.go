@@ -113,13 +113,17 @@ func TestGenerate(t *testing.T) {
 func BenchmarkIsValid(b *testing.B) {
 	v := VoterRegistration{}
 	for i := 0; i < b.N; i++ {
-		v.IsValid("356061030159")
+		if err := v.IsValid("356061030159"); err != nil {
+			b.Fatal(err)
+		}
 	}
 }
 
 func BenchmarkGenerate(b *testing.B) {
 	v := VoterRegistration{}
 	for i := 0; i < b.N; i++ {
-		v.Generate(digit.WithUF("MG"))
+		if _, err := v.Generate(digit.WithUF("MG")); err != nil {
+			b.Fatal(err)
+		}
 	}
 }

@@ -71,13 +71,17 @@ func TestGenerate(t *testing.T) {
 func BenchmarkIsValid(b *testing.B) {
 	c := CNH{}
 	for i := 0; i < b.N; i++ {
-		c.IsValid("34390008188")
+		if err := c.IsValid("34390008188"); err != nil {
+			b.Fatal(err)
+		}
 	}
 }
 
 func BenchmarkGenerate(b *testing.B) {
 	c := CNH{}
 	for i := 0; i < b.N; i++ {
-		c.Generate()
+		if _, err := c.Generate(); err != nil {
+			b.Fatal(err)
+		}
 	}
 }

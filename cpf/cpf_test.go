@@ -78,13 +78,17 @@ func TestGenerate(t *testing.T) {
 func BenchmarkIsValid(b *testing.B) {
 	c := CPF{}
 	for i := 0; i < b.N; i++ {
-		c.IsValid("12345678909")
+		if err := c.IsValid("12345678909"); err != nil {
+			b.Fatal(err)
+		}
 	}
 }
 
 func BenchmarkGenerate(b *testing.B) {
 	c := CPF{}
 	for i := 0; i < b.N; i++ {
-		c.Generate()
+		if _, err := c.Generate(); err != nil {
+			b.Fatal(err)
+		}
 	}
 }
