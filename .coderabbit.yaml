@@ -1,0 +1,68 @@
+language: en-US
+tone_instructions: Direct and specific. Point to the file and line, say what breaks for a developer using the brazilcode package, and suggest the fix. Skip praise and style nits that gofmt and golangci-lint already enforce.
+reviews:
+  profile: assertive
+  request_changes_workflow: true
+  high_level_summary: true
+  poem: false
+  review_status: true
+  collapse_walkthrough: true
+  auto_review:
+    enabled: true
+    drafts: false
+    base_branches:
+      - dev
+      - main
+  path_filters:
+    - "!go.sum"
+  path_instructions:
+    - path: "**/*.go"
+      instructions: |
+        brazilcode is a public Go library (module github.com/potatowski/brazilcode/v3) that validates, generates and formats Brazilian document numbers. Flag:
+        - check digit algorithms that differ from the official rules (CPF, CNPJ including the alphanumeric format, CNH, RENAVAM, Título de Eleitor), wrong weights, wrong mod-11 handling or wrong special cases such as digit 10 or 11;
+        - inputs that panic instead of returning an error (empty strings, wrong length, non-ASCII, letters where only digits are allowed);
+        - formatting that drops or reorders characters, or accepts invalid input silently;
+        - generators that can produce invalid numbers, repeated-digit sequences rejected by IsValid, or that use math/rand where tests depend on determinism;
+        - new errors not declared as exported sentinel errors, or errors compared by string instead of errors.Is;
+        - exported API changes without a GoDoc comment;
+        - any change to an exported identifier, signature, error value or behaviour that breaks existing callers. Breaking changes need a new major version with the module path changed to /v4 and every import updated;
+        - new dependencies (the module has none) and code that needs a Go version newer than the go directive in go.mod;
+        - new behaviour without table-driven tests, and tests that would pass without the feature.
+    - path: "internal/digit/**"
+      instructions: |
+        Shared check digit and formatting helpers used by every document package. A change here affects all document types: require tests for each caller that depends on the changed behaviour.
+    - path: "CHANGELOG.md"
+      instructions: |
+        Keep a Changelog format. User-visible changes go under Unreleased with the right section (Added, Changed, Deprecated, Removed, Fixed, Security).
+    - path: "README.md"
+      instructions: |
+        The README must match the code: supported documents, import path with the current major version, examples that compile, and error values.
+    - path: ".github/workflows/**"
+      instructions: |
+        Job permissions stay minimal, third-party actions are pinned, and the vet, race test, golangci-lint and govulncheck jobs keep running on pull requests.
+  pre_merge_checks:
+    docstrings:
+      mode: "off"
+    custom_checks:
+      - name: Module major version
+        mode: error
+        instructions: Fail if the pull request breaks the exported API (removed or renamed identifiers, changed signatures, changed error values, or behaviour that existing callers rely on) without moving the module path to the next major version (/v4) and updating every import, README and example.
+      - name: Algorithm tests
+        mode: warning
+        instructions: Fail if validation, generation or formatting logic changes without table-driven tests covering valid numbers, invalid check digits, wrong lengths and formatted input.
+  tools:
+    golangci-lint:
+      enabled: true
+    gitleaks:
+      enabled: true
+    actionlint:
+      enabled: true
+    yamllint:
+      enabled: true
+    markdownlint:
+      enabled: false
+knowledge_base:
+  learnings:
+    scope: local
+chat:
+  auto_reply: true
