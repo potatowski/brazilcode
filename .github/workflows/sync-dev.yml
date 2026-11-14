@@ -1,0 +1,49 @@
+name: sync-dev
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: sync-dev
+  cancel-in-progress: false
+
+permissions: {}
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Open the main to dev pull request and enable auto-merge
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          ahead=$(gh api "repos/$GH_REPO/compare/dev...main" --jq .ahead_by)
+          if [ "$ahead" = "0" ]; then
+            echo "dev already contains main"
+            exit 0
+          fi
+          pr=$(gh pr list --base dev --head main --state open --json number --jq '.[0].number // empty')
+          if [ -z "$pr" ]; then
+            url=$(gh pr create --base dev --head main \
+              --title "chore: sync main into dev" \
+              --body "Brings release and merge commits from \`main\` back into \`dev\` so the next \`dev\` to \`main\` pull request is up to date. Opened by the sync-dev workflow; it merges itself with a merge commit once the required checks pass. If it has conflicts, resolve them on a branch from \`dev\` and merge with a merge commit.")
+            pr=${url##*/}
+          fi
+          mergeable=""
+          for _ in 1 2 3 4 5; do
+            mergeable=$(gh pr view "$pr" --json mergeable --jq .mergeable)
+            [ "$mergeable" != "UNKNOWN" ] && break
+            sleep 5
+          done
+          if [ "$mergeable" = "CONFLICTING" ]; then
+            echo "::warning::PR #$pr has conflicts with dev; resolve them on a branch from dev"
+            exit 0
+          fi
+          gh pr merge "$pr" --auto --merge
