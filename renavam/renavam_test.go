@@ -70,13 +70,17 @@ func TestGenerate(t *testing.T) {
 func BenchmarkIsValid(b *testing.B) {
 	r := RENAVAM{}
 	for i := 0; i < b.N; i++ {
-		r.IsValid("62959061142")
+		if err := r.IsValid("62959061142"); err != nil {
+			b.Fatal(err)
+		}
 	}
 }
 
 func BenchmarkGenerate(b *testing.B) {
 	r := RENAVAM{}
 	for i := 0; i < b.N; i++ {
-		r.Generate()
+		if _, err := r.Generate(); err != nil {
+			b.Fatal(err)
+		}
 	}
 }

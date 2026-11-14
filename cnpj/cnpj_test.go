@@ -105,13 +105,17 @@ func TestGenerateAlphanumeric(t *testing.T) {
 func BenchmarkIsValid(b *testing.B) {
 	c := CNPJ{}
 	for i := 0; i < b.N; i++ {
-		c.IsValid("11222333000181")
+		if err := c.IsValid("11222333000181"); err != nil {
+			b.Fatal(err)
+		}
 	}
 }
 
 func BenchmarkGenerate(b *testing.B) {
 	c := CNPJ{}
 	for i := 0; i < b.N; i++ {
-		c.Generate()
+		if _, err := c.Generate(); err != nil {
+			b.Fatal(err)
+		}
 	}
 }

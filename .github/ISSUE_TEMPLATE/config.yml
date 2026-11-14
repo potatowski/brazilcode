@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Report a security vulnerability
+    url: https://github.com/potatowski/brazilcode/security/advisories/new
+    about: Report security problems privately, never in a public issue
+  - name: Documentation
+    url: https://pkg.go.dev/github.com/potatowski/brazilcode/v3
+    about: API reference and examples
